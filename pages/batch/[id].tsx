@@ -21,11 +21,12 @@ const emptyTray: Tray = {
 export default function BatchPage() {
   const router = useRouter();
   const params = useParams();
-  const batchId = typeof params?.id === "string" ? params.id : Array.isArray(params?.id) ? params.id[0] : "";
+  const batchId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [selectedTrayIndex, setSelectedTrayIndex] = useState<number | null>(null);
+  const [moveIndex, setMoveIndex] = useState<number | null>(null);
   const [targetBatch, setTargetBatch] = useState<string>("");
 
   useEffect(() => {
@@ -59,11 +60,11 @@ export default function BatchPage() {
   };
 
   const handleTrayMove = () => {
-    if (selectedTrayIndex === null || !targetBatch || targetBatch === batchId) return;
+    if (moveIndex === null || targetBatch === batchId) return;
 
-    const trayToMove = trays[selectedTrayIndex];
+    const trayToMove = trays[moveIndex];
     const updatedCurrent = [...trays];
-    updatedCurrent[selectedTrayIndex] = emptyTray;
+    updatedCurrent[moveIndex] = emptyTray;
     setTrays(updatedCurrent);
 
     const targetKey = `batch-${targetBatch}`;
@@ -72,54 +73,44 @@ export default function BatchPage() {
       ? JSON.parse(targetBatchData)
       : Array(4).fill(emptyTray);
 
-    const emptySpotIndex = targetTrays.findIndex((tray) => tray.name === "");
+    const updatedTarget = [...targetTrays];
+    const emptySpotIndex = updatedTarget.findIndex((tray) => tray.name === "");
+
     if (emptySpotIndex !== -1) {
-      targetTrays[emptySpotIndex] = trayToMove;
-      localStorage.setItem(targetKey, JSON.stringify(targetTrays));
+      updatedTarget[emptySpotIndex] = trayToMove;
+      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
     }
 
+    setMoveIndex(null);
     setTargetBatch("");
-    setSelectedTrayIndex(null);
   };
 
   return (
     <main className={styles.main}>
-      <h1>Batch {batchId?.padStart(3, "0")}</h1>
-      <button className={styles.backButton} onClick={() => router.push("/")}>
-        Ana Sayfaya Dön
-      </button>
+      <h1>Batch {batchId?.toString().padStart(3, "0")}</h1>
+      <button className={styles.backButton} onClick={() => router.push("/")}>Ana Sayfaya Dön</button>
 
       <div className={styles.grid}>
         {trays.map((tray, index) => (
           <div
             key={index}
             className={styles.trayCard}
-            style={{
-              border:
-                selectedTrayIndex === index ? "2px solid white" : "none",
-            }}
+            onClick={() => setSelectedTrayIndex(index)}
           >
-            {editIndex === index ? (
-              <input
-                type="text"
-                value={tray.name}
-                onChange={(e) =>
-                  handleFieldChange(index, "name", e.target.value)
-                }
-                onBlur={() => setEditIndex(null)}
-                autoFocus
-              />
-            ) : (
-              <div onClick={() => setEditIndex(index)}>{tray.name || "-"}</div>
-            )}
-            <button onClick={() => setSelectedTrayIndex(index)}>
-              Batch Taşı
-            </button>
+            <div>{tray.name || "-"}</div>
           </div>
         ))}
       </div>
 
-      {selectedTrayIndex !== null && (
+      <button
+        className={styles.moveButton}
+        onClick={() => setMoveIndex(0)}
+        style={{ marginTop: "2rem" }}
+      >
+        Batch Taşı
+      </button>
+
+      {moveIndex !== null && (
         <div className={styles.movePrompt}>
           <label>Taşınacak Batch ID:</label>
           <input
@@ -128,7 +119,56 @@ export default function BatchPage() {
             onChange={(e) => setTargetBatch(e.target.value)}
           />
           <button onClick={handleTrayMove}>Taşı</button>
-          <button onClick={() => setSelectedTrayIndex(null)}>İptal</button>
+          <button onClick={() => setMoveIndex(null)}>iptal</button>
+        </div>
+      )}
+
+      {selectedTrayIndex !== null && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button
+              className={styles.closeModal}
+              onClick={() => setSelectedTrayIndex(null)}
+            >
+              X
+            </button>
+            <h2>Tepsi {selectedTrayIndex + 1} Detayları</h2>
+            <label>Ekim Tarihi:</label>
+            <input
+              type="date"
+              value={trays[selectedTrayIndex].sowingDate}
+              onChange={(e) =>
+                handleFieldChange(selectedTrayIndex, "sowingDate", e.target.value)
+              }
+            />
+            <label>Işığa Alım Tarihi:</label>
+            <input
+              type="date"
+              value={trays[selectedTrayIndex].lightOnDate}
+              onChange={(e) =>
+                handleFieldChange(selectedTrayIndex, "lightOnDate", e.target.value)
+              }
+            />
+            <div>
+              <strong>Sulama Takvimi:</strong>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                {trays[selectedTrayIndex].wateringSchedule.map((day, i) => (
+                  <label key={i}>
+                    <input
+                      type="checkbox"
+                      checked={day}
+                      onChange={() => {
+                        const updated = [...trays];
+                        updated[selectedTrayIndex].wateringSchedule[i] = !day;
+                        setTrays(updated);
+                      }}
+                    />
+                    Gün {i + 1}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </main>
