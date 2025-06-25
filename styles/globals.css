@@ -35,8 +35,34 @@ a {
   text-decoration: none;
 }
 
+/* input[type="date"] için dark ve light tema desteğiyle özel stil */
+input[type="date"] {
+  background: #232323;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 6px;
+  margin-bottom: 0.85rem;
+  margin-top: 0.14rem;
+  padding: 0.38rem 0.8rem;
+  width: 100%;
+  font-size: 1.02rem;
+}
+
+@media (prefers-color-scheme: light) {
+  input[type="date"] {
+    background: #f3f3f3;
+    color: #232323;
+    border: 1px solid #ccc;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+  input[type="date"] {
+    background: #232323;
+    color: #fff;
+    border: 1px solid #444;
   }
 }
