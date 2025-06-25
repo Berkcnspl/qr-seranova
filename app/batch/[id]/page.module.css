@@ -1,5 +1,7 @@
 .main {
   min-height: 100vh;
+  min-width: 100vw;  /* Eklendi! */
+  width: 100vw;       /* Eklendi! */
   background: #111;
   font-family: 'Inter', sans-serif;
   color: #fff;
