@@ -21,7 +21,7 @@ const emptyTray: Tray = {
 export default function BatchPage() {
   const router = useRouter();
   const params = useParams();
-  const batchId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const batchId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -84,22 +84,7 @@ export default function BatchPage() {
     setTargetBatch("");
   };
 
-  // Modal için state ve fonksiyonlar
   const [modalIndex, setModalIndex] = useState<number | null>(null);
-
-  const toggleModal = (index: number | null) => {
-    setModalIndex(index);
-  };
-
-  const toggleWateringDay = (index: number, day: number) => {
-    setTrays((prev) => {
-      const updated = [...prev];
-      const wateringSchedule = [...updated[index].wateringSchedule];
-      wateringSchedule[day] = !wateringSchedule[day];
-      updated[index] = { ...updated[index], wateringSchedule };
-      return updated;
-    });
-  };
 
   return (
     <main className={styles.main}>
@@ -112,93 +97,116 @@ export default function BatchPage() {
           <div
             key={index}
             className={styles.trayCard}
-            onClick={() => toggleModal(index)}
+            onClick={() => setModalIndex(index)}
           >
             {editIndex === index ? (
               <input
                 type="text"
                 value={tray.name}
-                onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange(index, "name", e.target.value)
+                }
                 onBlur={() => setEditIndex(null)}
                 autoFocus
-                onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <div onClick={(e) => {
-                e.stopPropagation();
-                setEditIndex(index);
-              }}>
-                {tray.name || "-"}
-              </div>
+              <div>{tray.name || "-"}</div>
             )}
           </div>
         ))}
       </div>
 
+      <div className={styles.moveSection}>
+        <button
+          disabled={moveIndex === null}
+          onClick={handleTrayMove}
+          style={{ cursor: moveIndex === null ? "not-allowed" : "pointer" }}
+        >
+          Batch Taşı
+        </button>
+        <select
+          value={moveIndex === null ? "" : moveIndex}
+          onChange={(e) => setMoveIndex(Number(e.target.value))}
+        >
+          <option value="" disabled>
+            Taşınacak Tepsiyi Seç
+          </option>
+          {trays.map((_, i) => (
+            <option key={i} value={i}>
+              Tepsi {i + 1}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Hedef Batch ID"
+          value={targetBatch}
+          onChange={(e) => setTargetBatch(e.target.value)}
+        />
+      </div>
+
       {modalIndex !== null && (
-        <div className={styles.modalOverlay} onClick={() => toggleModal(null)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setModalIndex(null)}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.modalHeader}>
               <h2>Tepsi {modalIndex + 1} Detayları</h2>
               <button
                 className={styles.closeButton}
-                onClick={() => toggleModal(null)}
+                onClick={() => setModalIndex(null)}
               >
-                &times;
+                ×
               </button>
             </div>
-
-            <label>Ekim Tarihi:</label>
-            <input
-              type="date"
-              value={trays[modalIndex].sowingDate}
-              onChange={(e) =>
-                handleFieldChange(modalIndex, "sowingDate", e.target.value)
-              }
-            />
-
-            <label>Işığa Alım Tarihi:</label>
-            <input
-              type="date"
-              value={trays[modalIndex].lightOnDate}
-              onChange={(e) =>
-                handleFieldChange(modalIndex, "lightOnDate", e.target.value)
-              }
-            />
-
-            <strong>Sulama Takvimi:</strong>
+            <label>
+              Ekim Tarihi:
+              <input
+                type="date"
+                value={trays[modalIndex].sowingDate}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "sowingDate", e.target.value)
+                }
+              />
+            </label>
+            <label>
+              Işığa Alım Tarihi:
+              <input
+                type="date"
+                value={trays[modalIndex].lightOnDate}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "lightOnDate", e.target.value)
+                }
+              />
+            </label>
             <div className={styles.wateringSchedule}>
-              {trays[modalIndex].wateringSchedule.map((water, day) => (
-                <label key={day}>
+              <strong>Sulama Takvimi:</strong>
+              {trays[modalIndex].wateringSchedule.map((checked, i) => (
+                <label key={i}>
                   <input
                     type="checkbox"
-                    checked={water}
-                    onChange={() => toggleWateringDay(modalIndex, day)}
+                    checked={checked}
+                    onChange={() => {
+                      const newSchedule = [...trays[modalIndex].wateringSchedule];
+                      newSchedule[i] = !newSchedule[i];
+                      handleFieldChange(
+                        modalIndex,
+                        "wateringSchedule",
+                        JSON.stringify(newSchedule)
+                      );
+                    }}
                   />
-                  Gün {day + 1}
+                  Gün {i + 1}
                 </label>
               ))}
             </div>
           </div>
         </div>
       )}
-
-      <div className={styles.moveSection}>
-        {moveIndex === null ? (
-          <button onClick={() => setMoveIndex(0)}>Batch Taşı</button>
-        ) : (
-          <>
-            <label>Taşınacak Batch ID:</label>
-            <input
-              type="text"
-              value={targetBatch}
-              onChange={(e) => setTargetBatch(e.target.value)}
-            />
-            <button onClick={handleTrayMove}>Taşı</button>
-            <button onClick={() => setMoveIndex(null)}>İptal</button>
-          </>
-        )}
-      </div>
     </main>
   );
 }
