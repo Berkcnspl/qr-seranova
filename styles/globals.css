@@ -66,3 +66,8 @@ input[type="date"] {
     border: 1px solid #444;
   }
 }
+label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 1.05rem;
+}
