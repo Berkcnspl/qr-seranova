@@ -21,7 +21,6 @@ const emptyTray: Tray = {
 export default function BatchPage() {
   const router = useRouter();
   const params = useParams();
-  // HATA BURADA GÜVENLİ HALE GETİRİLDİ:
   const batchId =
     params && "id" in params
       ? Array.isArray(params.id)
@@ -31,6 +30,7 @@ export default function BatchPage() {
 
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<number | null>(null);
   const [targetBatch, setTargetBatch] = useState<string>("");
 
@@ -97,8 +97,6 @@ export default function BatchPage() {
     setTargetBatch("");
   };
 
-  const [modalIndex, setModalIndex] = useState<number | null>(null);
-
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>
@@ -109,24 +107,34 @@ export default function BatchPage() {
       </button>
       <div className={styles.grid}>
         {trays.map((tray, index) => (
-          <div
-            key={index}
-            className={styles.trayCard}
-            onClick={() => setModalIndex(index)}
-          >
+          <div key={index} className={styles.trayCard}>
             {editIndex === index ? (
               <input
                 type="text"
                 value={tray.name}
+                className={styles.trayNameInput}
                 onChange={(e) =>
                   handleFieldChange(index, "name", e.target.value)
                 }
                 onBlur={() => setEditIndex(null)}
                 autoFocus
+                onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <div>{tray.name || "-"}</div>
+              <div
+                className={styles.trayName}
+                onClick={() => setEditIndex(index)}
+              >
+                {tray.name || "-"}
+              </div>
             )}
+            <button
+              className={styles.detailButton}
+              onClick={() => setModalIndex(index)}
+              tabIndex={-1}
+            >
+              Detaylar
+            </button>
           </div>
         ))}
       </div>
@@ -135,6 +143,7 @@ export default function BatchPage() {
         <button
           disabled={moveIndex === null}
           onClick={handleTrayMove}
+          className={styles.moveButtonMain}
           style={{ cursor: moveIndex === null ? "not-allowed" : "pointer" }}
         >
           Batch Taşı
@@ -142,6 +151,7 @@ export default function BatchPage() {
         <select
           value={moveIndex === null ? "" : moveIndex}
           onChange={(e) => setMoveIndex(Number(e.target.value))}
+          className={styles.moveSelect}
         >
           <option value="" disabled>
             Taşınacak Tepsiyi Seç
@@ -157,6 +167,7 @@ export default function BatchPage() {
           placeholder="Hedef Batch ID"
           value={targetBatch}
           onChange={(e) => setTargetBatch(e.target.value)}
+          className={styles.moveInput}
         />
       </div>
 
