@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
@@ -18,22 +18,27 @@ const emptyTray: Tray = {
   lightOnDate: "",
 };
 
-export default function BatchPage({ params }: { params: { id: string } }) {
+export default function BatchPage() {
   const router = useRouter();
+  const { id } = router.query;
+
   const [trays, setTrays] = useState<Tray[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(`batch-${params.id}`);
+    if (typeof window !== "undefined" && typeof id === "string") {
+      const saved = localStorage.getItem(`batch-${id}`);
       return saved ? JSON.parse(saved) : Array(4).fill(emptyTray);
     }
     return Array(4).fill(emptyTray);
   });
+
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<number | null>(null);
   const [targetBatch, setTargetBatch] = useState<string>("");
 
   useEffect(() => {
-    localStorage.setItem(`batch-${params.id}`, JSON.stringify(trays));
-  }, [trays, params.id]);
+    if (typeof id === "string") {
+      localStorage.setItem(`batch-${id}`, JSON.stringify(trays));
+    }
+  }, [trays, id]);
 
   const handleFieldChange = (
     index: number,
@@ -51,7 +56,12 @@ export default function BatchPage({ params }: { params: { id: string } }) {
   };
 
   const handleTrayMove = () => {
-    if (moveIndex === null || targetBatch === params.id) return;
+    if (
+      moveIndex === null ||
+      targetBatch === id ||
+      typeof id !== "string"
+    )
+      return;
 
     const trayToMove = trays[moveIndex];
     const updatedCurrent = [...trays];
@@ -65,9 +75,7 @@ export default function BatchPage({ params }: { params: { id: string } }) {
       : Array(4).fill(emptyTray);
 
     const updatedTarget = [...targetTrays];
-    const emptySpotIndex = updatedTarget.findIndex(
-      (tray) => tray.name === ""
-    );
+    const emptySpotIndex = updatedTarget.findIndex((tray) => tray.name === "");
 
     if (emptySpotIndex !== -1) {
       updatedTarget[emptySpotIndex] = trayToMove;
@@ -78,9 +86,11 @@ export default function BatchPage({ params }: { params: { id: string } }) {
     setTargetBatch("");
   };
 
+  if (typeof id !== "string") return <div>Yükleniyor...</div>;
+
   return (
     <main className={styles.main}>
-      <h1>Batch {params.id.padStart(3, "0")}</h1>
+      <h1>Batch {id.padStart(3, "0")}</h1>
       <button className={styles.backButton} onClick={() => router.push("/")}>
         Ana Sayfaya Dön
       </button>
