@@ -98,3 +98,10 @@ html, body, #__next, main {
   padding: 0 !important;
   margin: 0 !important;
 }
+html, body, #__next {
+  background: #111 !important;
+  border: none !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  overflow-x: hidden !important;
+}
