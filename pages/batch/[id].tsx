@@ -1,154 +1,117 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const emptyTray = {
-  bitki: '',
-  ekimTarihi: '',
-  isigAlimTarihi: '',
+  bitki: "",
+  ekimTarihi: "",
+  isigAlimTarihi: "",
   sulama: Array(10).fill(false),
 };
 
-export default function BatchPage() {
+export default function BatchDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const batchId = typeof id === 'string' ? id : '001';
-
-  const [trays, setTrays] = useState(() => Array(4).fill(emptyTray));
+  const [trays, setTrays] = useState([emptyTray, emptyTray, emptyTray, emptyTray]);
   const [selectedTrayIndex, setSelectedTrayIndex] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [activeTrayIndex, setActiveTrayIndex] = useState<number | null>(null);
-  const [destinationBatch, setDestinationBatch] = useState('');
+  const [targetBatchId, setTargetBatchId] = useState("");
+  const [showMoveModal, setShowMoveModal] = useState(false);
 
-  // Yükleme
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(`batch-${batchId}`);
-      if (stored) {
-        setTrays(JSON.parse(stored));
+    if (id) {
+      const storedData = localStorage.getItem(`batch-${id}`);
+      if (storedData) {
+        setTrays(JSON.parse(storedData));
       }
     }
-  }, [batchId]);
+  }, [id]);
 
-  // Kaydetme
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(`batch-${batchId}`, JSON.stringify(trays));
+    if (id) {
+      localStorage.setItem(`batch-${id}`, JSON.stringify(trays));
     }
-  }, [trays, batchId]);
+  }, [trays, id]);
 
-  const handleFieldChange = (index: number, field: string, value: string | boolean) => {
+  const handleFieldChange = (index: number, field: keyof typeof emptyTray, value: string) => {
     const updated = [...trays];
-    if (field === 'sulama' && typeof value === 'boolean') {
-      updated[index].sulama = [...updated[index].sulama];
-      updated[index].sulama = updated[index].sulama.map((v, i) =>
-        i === selectedTrayIndex ? value : v
-      );
+    updated[index][field] = value;
+    setTrays(updated);
+  };
+
+  const handleSulamaToggle = (trayIndex: number, dayIndex: number, value: boolean) => {
+    const updated = [...trays];
+    updated[trayIndex].sulama[dayIndex] = value;
+    setTrays(updated);
+  };
+
+  const handleMoveTray = () => {
+    if (!targetBatchId || selectedTrayIndex === null) return;
+
+    const targetBatchData = localStorage.getItem(`batch-${targetBatchId}`);
+    let targetTrays = targetBatchData ? JSON.parse(targetBatchData) : [emptyTray, emptyTray, emptyTray, emptyTray];
+
+    const emptyIndex = targetTrays.findIndex((tray: typeof emptyTray) => tray.bitki === "");
+
+    if (emptyIndex !== -1) {
+      targetTrays[emptyIndex] = trays[selectedTrayIndex];
+      localStorage.setItem(`batch-${targetBatchId}`, JSON.stringify(targetTrays));
+
+      const updated = [...trays];
+      updated[selectedTrayIndex] = emptyTray;
+      setTrays(updated);
     } else {
-      (updated[index] as any)[field] = value;
-    }
-    setTrays(updated);
-  };
-
-  const handleSulamaToggle = (trayIndex: number, day: number) => {
-    const updated = [...trays];
-    updated[trayIndex].sulama[day] = !updated[trayIndex].sulama[day];
-    setTrays(updated);
-  };
-
-  const handleBatchTransfer = () => {
-    if (!destinationBatch || activeTrayIndex === null) return;
-    const destinationKey = `batch-${destinationBatch}`;
-    const trayToMove = trays[activeTrayIndex];
-
-    let destinationTrays = Array(4).fill(emptyTray);
-    const stored = localStorage.getItem(destinationKey);
-    if (stored) destinationTrays = JSON.parse(stored);
-
-    const emptyIndex = destinationTrays.findIndex(t => !t.bitki);
-    if (emptyIndex === -1) {
-      alert('Hedef batch dolu!');
-      return;
+      alert("Seçilen batch dolu. Lütfen başka bir batch seçin.");
     }
 
-    destinationTrays[emptyIndex] = trayToMove;
-    localStorage.setItem(destinationKey, JSON.stringify(destinationTrays));
-
-    const updated = [...trays];
-    updated[activeTrayIndex] = { ...emptyTray };
-    setTrays(updated);
-    setShowModal(false);
-    setActiveTrayIndex(null);
-    setDestinationBatch('');
+    setShowMoveModal(false);
   };
 
   return (
-    <div style={{ padding: '2rem', background: '#000', minHeight: '100vh', color: '#fff' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1.5rem' }}>
-        Batch {batchId}
-      </h1>
-
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div className="bg-black min-h-screen text-white p-6">
+      <h1 className="text-2xl font-bold mb-6">Batch {id?.toString().padStart(3, "0")}</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {trays.map((tray, index) => (
-          <div key={index} style={{
-            background: '#2f2f2f',
-            padding: '1rem',
-            borderRadius: '12px',
-            width: '300px',
-            minHeight: '150px',
-            position: 'relative'
-          }}>
-            <div
-              contentEditable
-              suppressContentEditableWarning
-              onBlur={(e) => handleFieldChange(index, 'bitki', e.currentTarget.textContent || '')}
-              style={{
-                background: '#fff',
-                color: '#000',
-                padding: '0.5rem 1rem',
-                textAlign: 'center',
-                fontWeight: 600,
-                borderRadius: '6px',
-                cursor: 'text',
-                marginBottom: '0.75rem'
-              }}
-            >
-              {tray.bitki || 'İsim Yok'}
+          <div key={index} className="bg-zinc-800 p-4 rounded-xl shadow-md">
+            <input
+              type="text"
+              value={tray.bitki}
+              onChange={(e) => handleFieldChange(index, "bitki", e.target.value)}
+              placeholder="Bitki Adı"
+              className="w-full mb-2 px-3 py-2 rounded bg-white text-black font-semibold text-center"
+            />
+            <label className="block mb-1">Ekim Tarihi:</label>
+            <input
+              type="date"
+              value={tray.ekimTarihi}
+              onChange={(e) => handleFieldChange(index, "ekimTarihi", e.target.value)}
+              className="w-full mb-2 px-3 py-2 rounded text-black"
+            />
+            <label className="block mb-1">Işığa Alım Tarihi:</label>
+            <input
+              type="date"
+              value={tray.isigAlimTarihi}
+              onChange={(e) => handleFieldChange(index, "isigAlimTarihi", e.target.value)}
+              className="w-full mb-2 px-3 py-2 rounded text-black"
+            />
+            <div className="mb-2">
+              <p className="font-semibold mb-1">Sulama Takvimi:</p>
+              <div className="grid grid-cols-5 gap-2">
+                {tray.sulama.map((value: boolean, i: number) => (
+                  <label key={i} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={value}
+                      onChange={(e) => handleSulamaToggle(index, i, e.target.checked)}
+                    />
+                    <span>Gün {i + 1}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-
             <button
-              onClick={() => setSelectedTrayIndex(index)}
-              style={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-                background: '#fff',
-                color: '#000',
-                fontWeight: 600,
-                border: 'none',
-                borderRadius: '6px',
-                padding: '6px 10px',
-                cursor: 'pointer'
-              }}
-            >
-              Detaylar
-            </button>
-
-            <button
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded"
               onClick={() => {
-                setShowModal(true);
-                setActiveTrayIndex(index);
-              }}
-              style={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-                background: '#ffcc00',
-                color: '#000',
-                fontWeight: 600,
-                border: 'none',
-                borderRadius: '6px',
-                padding: '6px 10px',
-                cursor: 'pointer'
+                setSelectedTrayIndex(index);
+                setShowMoveModal(true);
               }}
             >
               Batch Taşı
@@ -157,85 +120,46 @@ export default function BatchPage() {
         ))}
       </div>
 
-      <button
-        onClick={() => router.push('/')}
-        style={{
-          marginTop: '2rem',
-          background: '#fff',
-          color: '#000',
-          padding: '10px 20px',
-          fontWeight: 600,
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}
-      >
-        Ana Sayfaya Dön
-      </button>
-
-      {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.6)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            background: '#fff',
-            color: '#000',
-            padding: '2rem',
-            borderRadius: '12px',
-            minWidth: '300px',
-            textAlign: 'center'
-          }}>
-            <h2>Hangi Batch'e Taşımak İstiyorsun?</h2>
+      {showMoveModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white text-black p-6 rounded-xl shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-4">Taşınacak Batch Seç</h2>
             <select
-              value={destinationBatch}
-              onChange={(e) => setDestinationBatch(e.target.value)}
-              style={{ margin: '1rem 0', padding: '0.5rem', fontSize: '16px' }}
+              value={targetBatchId}
+              onChange={(e) => setTargetBatchId(e.target.value)}
+              className="w-full p-2 border rounded mb-4"
             >
-              <option value="">Batch seçin</option>
+              <option value="">Batch Seçin</option>
               {Array.from({ length: 84 }, (_, i) => (
-                <option
-                  key={i}
-                  value={(i + 1).toString().padStart(3, '0')}
-                  disabled={(i + 1).toString().padStart(3, '0') === batchId}
-                >
-                  Batch {(i + 1).toString().padStart(3, '0')}
+                <option key={i} value={(i + 1).toString()}>
+                  Batch {(i + 1).toString().padStart(3, "0")}
                 </option>
               ))}
             </select>
-            <br />
-            <button
-              onClick={handleBatchTransfer}
-              style={{
-                background: '#000',
-                color: '#fff',
-                padding: '10px 20px',
-                fontWeight: 600,
-                borderRadius: '6px',
-                marginRight: '1rem'
-              }}
-            >
-              Taşı
-            </button>
-            <button
-              onClick={() => setShowModal(false)}
-              style={{
-                background: '#ccc',
-                color: '#000',
-                padding: '10px 20px',
-                fontWeight: 600,
-                borderRadius: '6px'
-              }}
-            >
-              Vazgeç
-            </button>
+            <div className="flex justify-end space-x-2">
+              <button
+                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
+                onClick={() => setShowMoveModal(false)}
+              >
+                İptal
+              </button>
+              <button
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                onClick={handleMoveTray}
+              >
+                Taşı
+              </button>
+            </div>
           </div>
         </div>
       )}
+
+      <button
+        onClick={() => router.push("/")}
+        className="mt-10 bg-white text-black px-6 py-2 rounded shadow hover:bg-gray-200"
+      >
+        Ana Sayfaya Dön
+      </button>
     </div>
   );
 }
