@@ -1,15 +1,28 @@
 import Link from 'next/link';
 
 const batches = Array.from({ length: 84 }, (_, i) => ({
-  id: (i + 1).toString().padStart(3, '0'), // "001", "002", ..., "084"
+  id: (i + 1).toString().padStart(3, '0'),
 }));
 
 export default function Home() {
   return (
     <div style={{ padding: '2rem', background: '#000', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#fff', marginBottom: '2rem' }}>
-        Tüm Batch’ler (84 Raf)
-      </h1>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        marginBottom: '2rem'
+      }}>
+        <img
+          src="/images/seranova-dashboard-mail.logo.png"
+          alt="Seranova Logo"
+          style={{ height: '40px', width: 'auto' }}
+        />
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#fff' }}>
+          Batch Takip Sistemi
+        </h1>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
         {batches.map((batch) => (
           <Link key={batch.id} href={`/batch/${batch.id}`}>
