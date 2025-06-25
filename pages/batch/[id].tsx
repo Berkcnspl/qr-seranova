@@ -56,17 +56,17 @@ export default function BatchDetailPage() {
             key={tepsi.id}
             onClick={() => setOpenModalIndex(index)}
             style={{
-              border: '2px solid #ddd',
+              border: '2px solid #444',
               borderRadius: '12px',
               height: '160px',
-              background: '#f4f4f4 url("/images/tray-placeholder.png") center/contain no-repeat',
+              background: '#2e2e2e',
               display: 'flex',
               alignItems: 'flex-end',
               justifyContent: 'center',
               position: 'relative',
               paddingBottom: '1rem',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
             }}
           >
             {editIndex === index ? (
@@ -81,7 +81,9 @@ export default function BatchDetailPage() {
                   padding: '4px 8px',
                   fontSize: '14px',
                   borderRadius: '6px',
-                  border: '1px solid #ccc'
+                  border: '1px solid #888',
+                  background: '#1e1e1e',
+                  color: '#fff'
                 }}
               />
             ) : (
@@ -91,12 +93,12 @@ export default function BatchDetailPage() {
                   handleBitkiClick(index);
                 }}
                 style={{
-                  background: 'rgba(255,255,255,0.85)',
+                  background: 'rgba(255,255,255,0.1)',
                   padding: '4px 10px',
                   borderRadius: '6px',
                   fontWeight: 600,
                   fontSize: '14px',
-                  color: '#000'
+                  color: '#fff'
                 }}
               >
                 {tepsi.bitki || '–'}
@@ -113,7 +115,7 @@ export default function BatchDetailPage() {
           style={{
             position: 'fixed',
             top: 0, left: 0, right: 0, bottom: 0,
-            background: 'rgba(0,0,0,0.4)',
+            background: 'rgba(0,0,0,0.5)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
