@@ -31,25 +31,8 @@ export default function BatchPage() {
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [modalIndex, setModalIndex] = useState<number | null>(null);
-  const [moveIndex, setMoveIndex] = useState<string>(""); // şimdi string, çünkü "all" da gelebilir
+  const [moveIndex, setMoveIndex] = useState<string>("");
   const [targetBatch, setTargetBatch] = useState<string>("");
-
-  // Var olan batch ID'leri için localStorage'da arama yapıyoruz
-  const [allBatchIds, setAllBatchIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    // Mevcut tüm batch id'lerini bul
-    if (typeof window !== "undefined") {
-      const ids: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("batch-")) {
-          ids.push(key.replace("batch-", ""));
-        }
-      }
-      setAllBatchIds(ids);
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined" && batchId) {
@@ -88,25 +71,30 @@ export default function BatchPage() {
     });
   };
 
-  // Tüm tepsileri taşıma veya tek tepsiyi taşıma fonksiyonu
+  // DÜZ SIRAYLA taşıma fonksiyonu
   const handleTrayMove = () => {
     if (!moveIndex || !targetBatch || targetBatch === batchId) return;
 
+    const targetKey = `batch-${targetBatch}`;
+    const targetBatchData = localStorage.getItem(targetKey);
+    let targetTrays: Tray[] = targetBatchData
+      ? JSON.parse(targetBatchData)
+      : Array(4).fill(emptyTray);
+
     if (moveIndex === "all") {
-      // Hepsi seçiliyse, 4 tepsiyi de taşı
-      trays.forEach((trayToMove, idx) => {
-        if (trayToMove.name !== "") {
-          // Boş tepsileri taşımıyoruz
-          moveSingleTray(idx, trayToMove);
-        }
+      // Tüm tepsileri hedef batch'e, kendi index'lerinde sıralı taşı
+      const updatedTarget = [...targetTrays];
+      trays.forEach((tray, idx) => {
+        updatedTarget[idx] = tray;
       });
-      // Bütün tepsileri boşalt
+      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
       setTrays(Array(4).fill(emptyTray));
     } else {
       const idx = Number(moveIndex);
       if (isNaN(idx)) return;
-      moveSingleTray(idx, trays[idx]);
-      // Seçili tepsiyi boşalt
+      const updatedTarget = [...targetTrays];
+      updatedTarget[idx] = trays[idx];
+      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
       setTrays((prev) => {
         const updated = [...prev];
         updated[idx] = emptyTray;
@@ -118,23 +106,6 @@ export default function BatchPage() {
     setTargetBatch("");
   };
 
-  // Tek bir tepsiyi taşır
-  const moveSingleTray = (trayIndex: number, trayToMove: Tray) => {
-    const targetKey = `batch-${targetBatch}`;
-    const targetBatchData = localStorage.getItem(targetKey);
-    const targetTrays: Tray[] = targetBatchData
-      ? JSON.parse(targetBatchData)
-      : Array(4).fill(emptyTray);
-
-    const updatedTarget = [...targetTrays];
-    const emptySpotIndex = updatedTarget.findIndex((tray) => tray.name === "");
-
-    if (emptySpotIndex !== -1) {
-      updatedTarget[emptySpotIndex] = trayToMove;
-      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
-    }
-  };
-
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>
@@ -143,20 +114,6 @@ export default function BatchPage() {
       <button className={styles.backButton} onClick={() => router.push("/")}>
         Ana Sayfaya Dön
       </button>
-
-      {/* Var olan batch id'leri burada gösteriliyor */}
-      <div style={{ margin: "1.5rem 3rem 0 3rem", color: "#aaa" }}>
-        <strong>Mevcut Batch ID’ler:</strong>
-        <ul>
-          {allBatchIds.length === 0 && <li>Henüz hiç batch yok.</li>}
-          {allBatchIds.map((id) => (
-            <li key={id}>
-              {id} {id === batchId ? "(Bu sayfa)" : ""}
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <div className={styles.grid}>
         {trays.map((tray, index) => (
           <div key={index} className={styles.trayCard}>
@@ -221,13 +178,7 @@ export default function BatchPage() {
           value={targetBatch}
           onChange={(e) => setTargetBatch(e.target.value)}
           className={styles.moveInput}
-          list="batch-ids"
         />
-        <datalist id="batch-ids">
-          {allBatchIds.map((id) => (
-            <option value={id} key={id} />
-          ))}
-        </datalist>
       </div>
 
       {modalIndex !== null && (
