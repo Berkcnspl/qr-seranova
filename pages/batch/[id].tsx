@@ -1,242 +1,238 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
-interface Tepsi {
-  id: number;
-  bitki: string;
-  ekimTarihi?: string;
-  isigAlimTarihi?: string;
-  sulamaTakvimi: boolean[];
-}
+const emptyTray = {
+  bitki: '',
+  ekimTarihi: '',
+  isigAlimTarihi: '',
+  sulama: Array(10).fill(false),
+};
 
-export default function BatchDetailPage() {
+export default function BatchPage() {
   const router = useRouter();
   const { id } = router.query;
+  const batchId = typeof id === 'string' ? id : '001';
 
-  const [tepsiler, setTepsiler] = useState<Tepsi[]>([
-    { id: 1, bitki: '', sulamaTakvimi: Array(10).fill(false) },
-    { id: 2, bitki: '', sulamaTakvimi: Array(10).fill(false) },
-    { id: 3, bitki: '', sulamaTakvimi: Array(10).fill(false) },
-    { id: 4, bitki: '', sulamaTakvimi: Array(10).fill(false) },
-  ]);
+  const [trays, setTrays] = useState(() => Array(4).fill(emptyTray));
+  const [selectedTrayIndex, setSelectedTrayIndex] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [activeTrayIndex, setActiveTrayIndex] = useState<number | null>(null);
+  const [destinationBatch, setDestinationBatch] = useState('');
 
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState<string>('');
-  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
-
-  const localKey = `batch_${id}_tepsiler`;
-
-  // Yüklenince localStorage'tan oku
+  // Yükleme
   useEffect(() => {
-    if (id && typeof window !== 'undefined') {
-      const saved = localStorage.getItem(localKey);
-      if (saved) {
-        setTepsiler(JSON.parse(saved));
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(`batch-${batchId}`);
+      if (stored) {
+        setTrays(JSON.parse(stored));
       }
     }
-  }, [id]);
+  }, [batchId]);
 
-  // Değiştikçe localStorage'a yaz
+  // Kaydetme
   useEffect(() => {
-    if (id && typeof window !== 'undefined') {
-      localStorage.setItem(localKey, JSON.stringify(tepsiler));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`batch-${batchId}`, JSON.stringify(trays));
     }
-  }, [tepsiler, id]);
+  }, [trays, batchId]);
 
-  const handleBitkiClick = (index: number) => {
-    setEditIndex(index);
-    setEditValue(tepsiler[index].bitki);
+  const handleFieldChange = (index: number, field: string, value: string | boolean) => {
+    const updated = [...trays];
+    if (field === 'sulama' && typeof value === 'boolean') {
+      updated[index].sulama = [...updated[index].sulama];
+      updated[index].sulama = updated[index].sulama.map((v, i) =>
+        i === selectedTrayIndex ? value : v
+      );
+    } else {
+      (updated[index] as any)[field] = value;
+    }
+    setTrays(updated);
   };
 
-  const handleEditSave = (index: number) => {
-    const updated = [...tepsiler];
-    updated[index].bitki = editValue.trim();
-    setTepsiler(updated);
-    setEditIndex(null);
+  const handleSulamaToggle = (trayIndex: number, day: number) => {
+    const updated = [...trays];
+    updated[trayIndex].sulama[day] = !updated[trayIndex].sulama[day];
+    setTrays(updated);
   };
 
-  const closeModal = () => {
-    setOpenModalIndex(null);
+  const handleBatchTransfer = () => {
+    if (!destinationBatch || activeTrayIndex === null) return;
+    const destinationKey = `batch-${destinationBatch}`;
+    const trayToMove = trays[activeTrayIndex];
+
+    let destinationTrays = Array(4).fill(emptyTray);
+    const stored = localStorage.getItem(destinationKey);
+    if (stored) destinationTrays = JSON.parse(stored);
+
+    const emptyIndex = destinationTrays.findIndex(t => !t.bitki);
+    if (emptyIndex === -1) {
+      alert('Hedef batch dolu!');
+      return;
+    }
+
+    destinationTrays[emptyIndex] = trayToMove;
+    localStorage.setItem(destinationKey, JSON.stringify(destinationTrays));
+
+    const updated = [...trays];
+    updated[activeTrayIndex] = { ...emptyTray };
+    setTrays(updated);
+    setShowModal(false);
+    setActiveTrayIndex(null);
+    setDestinationBatch('');
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif', background: '#000', minHeight: '100vh' }}>
-      <div style={{ marginBottom: '1rem' }}>
-        <Link href="/">
-          <span style={{
-            color: '#fff',
-            fontSize: '14px',
-            background: '#444',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            display: 'inline-block'
-          }}>← Ana Sayfaya Dön</span>
-        </Link>
-      </div>
-
-      <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#fff', marginBottom: '2rem' }}>
-        Batch {id}
+    <div style={{ padding: '2rem', background: '#000', minHeight: '100vh', color: '#fff' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+        Batch {batchId}
       </h1>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1.5rem'
-      }}>
-        {tepsiler.map((tepsi, index) => (
-          <div
-            key={tepsi.id}
-            onClick={() => setOpenModalIndex(index)}
-            style={{
-              border: '2px solid #444',
-              borderRadius: '12px',
-              height: '160px',
-              background: '#2e2e2e',
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              position: 'relative',
-              paddingBottom: '1rem',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-            }}
-          >
-            {editIndex === index ? (
-              <input
-                autoFocus
-                type="text"
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onBlur={() => handleEditSave(index)}
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  padding: '4px 8px',
-                  fontSize: '14px',
-                  borderRadius: '6px',
-                  border: '1px solid #888',
-                  background: '#1e1e1e',
-                  color: '#fff'
-                }}
-              />
-            ) : (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleBitkiClick(index);
-                }}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  padding: '4px 10px',
-                  borderRadius: '6px',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  color: '#fff'
-                }}
-              >
-                {tepsi.bitki || '–'}
-              </div>
-            )}
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        {trays.map((tray, index) => (
+          <div key={index} style={{
+            background: '#2f2f2f',
+            padding: '1rem',
+            borderRadius: '12px',
+            width: '300px',
+            minHeight: '150px',
+            position: 'relative'
+          }}>
+            <div
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={(e) => handleFieldChange(index, 'bitki', e.currentTarget.textContent || '')}
+              style={{
+                background: '#fff',
+                color: '#000',
+                padding: '0.5rem 1rem',
+                textAlign: 'center',
+                fontWeight: 600,
+                borderRadius: '6px',
+                cursor: 'text',
+                marginBottom: '0.75rem'
+              }}
+            >
+              {tray.bitki || 'İsim Yok'}
+            </div>
+
+            <button
+              onClick={() => setSelectedTrayIndex(index)}
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '10px',
+                background: '#fff',
+                color: '#000',
+                fontWeight: 600,
+                border: 'none',
+                borderRadius: '6px',
+                padding: '6px 10px',
+                cursor: 'pointer'
+              }}
+            >
+              Detaylar
+            </button>
+
+            <button
+              onClick={() => {
+                setShowModal(true);
+                setActiveTrayIndex(index);
+              }}
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+                background: '#ffcc00',
+                color: '#000',
+                fontWeight: 600,
+                border: 'none',
+                borderRadius: '6px',
+                padding: '6px 10px',
+                cursor: 'pointer'
+              }}
+            >
+              Batch Taşı
+            </button>
           </div>
         ))}
       </div>
 
-      {/* Modal */}
-      {openModalIndex !== null && (
-        <div
-          onClick={closeModal}
-          style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            background: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: '#fff',
-              padding: '2rem',
-              borderRadius: '12px',
-              width: '90%',
-              maxWidth: '500px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-              position: 'relative',
-              color: '#000'
-            }}
-          >
+      <button
+        onClick={() => router.push('/')}
+        style={{
+          marginTop: '2rem',
+          background: '#fff',
+          color: '#000',
+          padding: '10px 20px',
+          fontWeight: 600,
+          borderRadius: '8px',
+          cursor: 'pointer'
+        }}
+      >
+        Ana Sayfaya Dön
+      </button>
+
+      {showModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.6)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: '#fff',
+            color: '#000',
+            padding: '2rem',
+            borderRadius: '12px',
+            minWidth: '300px',
+            textAlign: 'center'
+          }}>
+            <h2>Hangi Batch'e Taşımak İstiyorsun?</h2>
+            <select
+              value={destinationBatch}
+              onChange={(e) => setDestinationBatch(e.target.value)}
+              style={{ margin: '1rem 0', padding: '0.5rem', fontSize: '16px' }}
+            >
+              <option value="">Batch seçin</option>
+              {Array.from({ length: 84 }, (_, i) => (
+                <option
+                  key={i}
+                  value={(i + 1).toString().padStart(3, '0')}
+                  disabled={(i + 1).toString().padStart(3, '0') === batchId}
+                >
+                  Batch {(i + 1).toString().padStart(3, '0')}
+                </option>
+              ))}
+            </select>
+            <br />
             <button
-              onClick={closeModal}
+              onClick={handleBatchTransfer}
               style={{
-                position: 'absolute',
-                top: '10px',
-                right: '15px',
-                fontSize: '20px',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer'
+                background: '#000',
+                color: '#fff',
+                padding: '10px 20px',
+                fontWeight: 600,
+                borderRadius: '6px',
+                marginRight: '1rem'
               }}
             >
-              ×
+              Taşı
             </button>
-
-            <h2 style={{ fontSize: '20px', marginBottom: '1rem', color: '#000' }}>
-              Tepsi {tepsiler[openModalIndex].id} Detayları
-            </h2>
-
-            <label style={{ display: 'block', marginBottom: '1rem', color: '#000' }}>
-              Ekim Tarihi:
-              <input
-                type="date"
-                value={tepsiler[openModalIndex].ekimTarihi || ''}
-                onChange={(e) => {
-                  const updated = [...tepsiler];
-                  updated[openModalIndex].ekimTarihi = e.target.value;
-                  setTepsiler(updated);
-                }}
-                style={{ marginLeft: '1rem' }}
-              />
-            </label>
-
-            <label style={{ display: 'block', marginBottom: '1rem', color: '#000' }}>
-              Işığa Alım Tarihi:
-              <input
-                type="date"
-                value={tepsiler[openModalIndex].isigAlimTarihi || ''}
-                onChange={(e) => {
-                  const updated = [...tepsiler];
-                  updated[openModalIndex].isigAlimTarihi = e.target.value;
-                  setTepsiler(updated);
-                }}
-                style={{ marginLeft: '1rem' }}
-              />
-            </label>
-
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#000' }}>
-                Sulama Takvimi:
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {tepsiler[openModalIndex].sulamaTakvimi.map((tikli, i) => (
-                  <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000' }}>
-                    <input
-                      type="checkbox"
-                      checked={tikli}
-                      onChange={() => {
-                        const updated = [...tepsiler];
-                        updated[openModalIndex].sulamaTakvimi[i] = !tikli;
-                        setTepsiler(updated);
-                      }}
-                    />
-                    Gün {i + 1}
-                  </label>
-                ))}
-              </div>
-            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              style={{
+                background: '#ccc',
+                color: '#000',
+                padding: '10px 20px',
+                fontWeight: 600,
+                borderRadius: '6px'
+              }}
+            >
+              Vazgeç
+            </button>
           </div>
         </div>
       )}
