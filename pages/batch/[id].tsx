@@ -6,7 +6,7 @@ interface Tepsi {
   bitki: string;
   ekimTarihi?: string;
   isigAlimTarihi?: string;
-  sulamaTakvimi: boolean[]; // 10 günlük tik atma
+  sulamaTakvimi: boolean[];
 }
 
 export default function BatchDetailPage() {
@@ -24,16 +24,20 @@ export default function BatchDetailPage() {
   const [editValue, setEditValue] = useState<string>('');
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
 
-  const handleEdit = (index: number) => {
+  const handleBitkiClick = (index: number) => {
     setEditIndex(index);
     setEditValue(tepsiler[index].bitki);
   };
 
-  const handleSave = (index: number) => {
+  const handleEditSave = (index: number) => {
     const updated = [...tepsiler];
     updated[index].bitki = editValue.trim();
     setTepsiler(updated);
     setEditIndex(null);
+  };
+
+  const closeModal = () => {
+    setOpenModalIndex(null);
   };
 
   return (
@@ -44,85 +48,58 @@ export default function BatchDetailPage() {
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '1.5rem'
       }}>
         {tepsiler.map((tepsi, index) => (
           <div
             key={tepsi.id}
-            style={{
-              border: '1px solid #ddd',
-              borderRadius: '12px',
-              padding: '1rem',
-              background: '#fff',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-              cursor: 'pointer'
-            }}
             onClick={() => setOpenModalIndex(index)}
+            style={{
+              border: '2px solid #ddd',
+              borderRadius: '12px',
+              height: '160px',
+              background: '#f4f4f4 url("/images/tray-placeholder.png") center/contain no-repeat',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              position: 'relative',
+              paddingBottom: '1rem',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}
           >
-            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '0.5rem' }}>
-              Tepsi {tepsi.id}
-            </div>
-
             {editIndex === index ? (
-              <>
-                <input
-                  type="text"
-                  placeholder="Bitki adı"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  style={{
-                    padding: '8px',
-                    width: '100%',
-                    border: '1px solid #ccc',
-                    borderRadius: '6px'
-                  }}
-                />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSave(index);
-                  }}
-                  style={{
-                    marginTop: '0.75rem',
-                    padding: '8px 14px',
-                    width: '100%',
-                    background: '#4CAF50',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: 500,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Kaydet
-                </button>
-              </>
+              <input
+                autoFocus
+                type="text"
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                onBlur={() => handleEditSave(index)}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  padding: '4px 8px',
+                  fontSize: '14px',
+                  borderRadius: '6px',
+                  border: '1px solid #ccc'
+                }}
+              />
             ) : (
-              <>
-                <div style={{ fontSize: '14px', color: '#333', minHeight: '24px' }}>
-                  Bitki: {tepsi.bitki || '–'}
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEdit(index);
-                  }}
-                  style={{
-                    marginTop: '0.75rem',
-                    padding: '8px 14px',
-                    width: '100%',
-                    background: '#2196F3',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: 500,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Düzenle
-                </button>
-              </>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBitkiClick(index);
+                }}
+                style={{
+                  background: 'rgba(255,255,255,0.85)',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  fontWeight: 600,
+                  fontSize: '14px'
+                }}
+              >
+                {tepsi.bitki || '–'}
+              </div>
             )}
           </div>
         ))}
@@ -130,26 +107,32 @@ export default function BatchDetailPage() {
 
       {/* Modal */}
       {openModalIndex !== null && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.4)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            background: '#fff',
-            padding: '2rem',
-            borderRadius: '12px',
-            width: '90%',
-            maxWidth: '500px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-            position: 'relative'
-          }}>
+        <div
+          onClick={closeModal}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.4)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: '#fff',
+              padding: '2rem',
+              borderRadius: '12px',
+              width: '90%',
+              maxWidth: '500px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+              position: 'relative'
+            }}
+          >
             <button
-              onClick={() => setOpenModalIndex(null)}
+              onClick={closeModal}
               style={{
                 position: 'absolute',
                 top: '10px',
@@ -159,7 +142,9 @@ export default function BatchDetailPage() {
                 background: 'transparent',
                 cursor: 'pointer'
               }}
-            >×</button>
+            >
+              ×
+            </button>
 
             <h2 style={{ fontSize: '20px', marginBottom: '1rem' }}>
               Tepsi {tepsiler[openModalIndex].id} Detayları
