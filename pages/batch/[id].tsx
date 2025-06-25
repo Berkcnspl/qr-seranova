@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Tepsi {
   id: number;
@@ -24,6 +25,25 @@ export default function BatchDetailPage() {
   const [editValue, setEditValue] = useState<string>('');
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
 
+  const localKey = `batch_${id}_tepsiler`;
+
+  // Yüklenince localStorage'tan oku
+  useEffect(() => {
+    if (id && typeof window !== 'undefined') {
+      const saved = localStorage.getItem(localKey);
+      if (saved) {
+        setTepsiler(JSON.parse(saved));
+      }
+    }
+  }, [id]);
+
+  // Değiştikçe localStorage'a yaz
+  useEffect(() => {
+    if (id && typeof window !== 'undefined') {
+      localStorage.setItem(localKey, JSON.stringify(tepsiler));
+    }
+  }, [tepsiler, id]);
+
   const handleBitkiClick = (index: number) => {
     setEditIndex(index);
     setEditValue(tepsiler[index].bitki);
@@ -42,6 +62,20 @@ export default function BatchDetailPage() {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif', background: '#000', minHeight: '100vh' }}>
+      <div style={{ marginBottom: '1rem' }}>
+        <Link href="/">
+          <span style={{
+            color: '#fff',
+            fontSize: '14px',
+            background: '#444',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            display: 'inline-block'
+          }}>← Ana Sayfaya Dön</span>
+        </Link>
+      </div>
+
       <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#fff', marginBottom: '2rem' }}>
         Batch {id}
       </h1>
