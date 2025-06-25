@@ -21,7 +21,13 @@ const emptyTray: Tray = {
 export default function BatchPage() {
   const router = useRouter();
   const params = useParams();
-  const batchId = Array.isArray(params.id) ? params.id[0] : params.id;
+  // HATA BURADA GÜVENLİ HALE GETİRİLDİ:
+  const batchId =
+    params && "id" in params
+      ? Array.isArray(params.id)
+        ? params.id[0]
+        : params.id
+      : "";
 
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -50,10 +56,17 @@ export default function BatchPage() {
   ) => {
     setTrays((prev) => {
       const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        [field]: value,
-      };
+      if (field === "wateringSchedule") {
+        updated[index] = {
+          ...updated[index],
+          [field]: JSON.parse(value),
+        };
+      } else {
+        updated[index] = {
+          ...updated[index],
+          [field]: value,
+        };
+      }
       return updated;
     });
   };
@@ -88,7 +101,9 @@ export default function BatchPage() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>Batch {batchId?.toString().padStart(3, "0")}</h1>
+      <h1 className={styles.title}>
+        Batch {batchId?.toString().padStart(3, "0")}
+      </h1>
       <button className={styles.backButton} onClick={() => router.push("/")}>
         Ana Sayfaya Dön
       </button>
@@ -191,7 +206,9 @@ export default function BatchPage() {
                     type="checkbox"
                     checked={checked}
                     onChange={() => {
-                      const newSchedule = [...trays[modalIndex].wateringSchedule];
+                      const newSchedule = [
+                        ...trays[modalIndex].wateringSchedule,
+                      ];
                       newSchedule[i] = !newSchedule[i];
                       handleFieldChange(
                         modalIndex,
