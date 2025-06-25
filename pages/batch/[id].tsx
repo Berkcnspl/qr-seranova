@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
@@ -18,13 +18,11 @@ const emptyTray: Tray = {
   lightOnDate: "",
 };
 
-export default function BatchPage() {
+export default function BatchPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { id } = router.query;
-
   const [trays, setTrays] = useState<Tray[]>(() => {
-    if (typeof window !== "undefined" && typeof id === "string") {
-      const saved = localStorage.getItem(`batch-${id}`);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(`batch-${params.id}`);
       return saved ? JSON.parse(saved) : Array(4).fill(emptyTray);
     }
     return Array(4).fill(emptyTray);
@@ -35,10 +33,8 @@ export default function BatchPage() {
   const [targetBatch, setTargetBatch] = useState<string>("");
 
   useEffect(() => {
-    if (typeof id === "string") {
-      localStorage.setItem(`batch-${id}`, JSON.stringify(trays));
-    }
-  }, [trays, id]);
+    localStorage.setItem(`batch-${params.id}`, JSON.stringify(trays));
+  }, [trays, params.id]);
 
   const handleFieldChange = (
     index: number,
@@ -56,12 +52,7 @@ export default function BatchPage() {
   };
 
   const handleTrayMove = () => {
-    if (
-      moveIndex === null ||
-      targetBatch === id ||
-      typeof id !== "string"
-    )
-      return;
+    if (moveIndex === null || targetBatch === params.id) return;
 
     const trayToMove = trays[moveIndex];
     const updatedCurrent = [...trays];
@@ -75,7 +66,9 @@ export default function BatchPage() {
       : Array(4).fill(emptyTray);
 
     const updatedTarget = [...targetTrays];
-    const emptySpotIndex = updatedTarget.findIndex((tray) => tray.name === "");
+    const emptySpotIndex = updatedTarget.findIndex(
+      (tray) => tray.name === ""
+    );
 
     if (emptySpotIndex !== -1) {
       updatedTarget[emptySpotIndex] = trayToMove;
@@ -86,17 +79,19 @@ export default function BatchPage() {
     setTargetBatch("");
   };
 
-  if (typeof id !== "string") return <div>Yükleniyor...</div>;
-
   return (
     <main className={styles.main}>
-      <h1>Batch {id.padStart(3, "0")}</h1>
+      <h1>Batch {params.id.padStart(3, "0")}</h1>
       <button className={styles.backButton} onClick={() => router.push("/")}>
         Ana Sayfaya Dön
       </button>
       <div className={styles.grid}>
         {trays.map((tray, index) => (
-          <div key={index} className={styles.trayCard}>
+          <div
+            key={index}
+            className={styles.trayCard}
+            onClick={() => setEditIndex(index)}
+          >
             {editIndex === index ? (
               <input
                 type="text"
@@ -108,29 +103,29 @@ export default function BatchPage() {
                 autoFocus
               />
             ) : (
-              <div onClick={() => setEditIndex(index)}>{tray.name || "-"}</div>
+              <div>{tray.name || "-"}</div>
             )}
-            <button
-              className={styles.moveButton}
-              onClick={() => setMoveIndex(index)}
-            >
-              Batch Taşı
-            </button>
           </div>
         ))}
       </div>
-      {moveIndex !== null && (
-        <div className={styles.movePrompt}>
-          <label>Taşınacak Batch ID:</label>
-          <input
-            type="text"
-            value={targetBatch}
-            onChange={(e) => setTargetBatch(e.target.value)}
-          />
-          <button onClick={handleTrayMove}>Taşı</button>
-          <button onClick={() => setMoveIndex(null)}>İptal</button>
-        </div>
-      )}
+
+      <div style={{ marginTop: "1rem" }}>
+        <label>Taşımak istediğin tepsi numarası (0-3):</label>
+        <input
+          type="number"
+          min="0"
+          max="3"
+          value={moveIndex ?? ""}
+          onChange={(e) => setMoveIndex(parseInt(e.target.value))}
+        />
+        <label>Taşınacak Batch ID:</label>
+        <input
+          type="text"
+          value={targetBatch}
+          onChange={(e) => setTargetBatch(e.target.value)}
+        />
+        <button onClick={handleTrayMove}>Batch Taşı</button>
+      </div>
     </main>
   );
 }
