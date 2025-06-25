@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 
 export type Tray = {
   name: string;
@@ -25,9 +25,9 @@ export default function BatchPage() {
 
   const [trays, setTrays] = useState<Tray[]>(Array(4).fill(emptyTray));
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [selectedTrayIndex, setSelectedTrayIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<number | null>(null);
   const [targetBatch, setTargetBatch] = useState<string>("");
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined" && batchId) {
@@ -55,6 +55,16 @@ export default function BatchPage() {
         ...updated[index],
         [field]: value,
       };
+      return updated;
+    });
+  };
+
+  const handleCheckboxToggle = (trayIndex: number, dayIndex: number) => {
+    setTrays((prev) => {
+      const updated = [...prev];
+      const tray = { ...updated[trayIndex] };
+      tray.wateringSchedule[dayIndex] = !tray.wateringSchedule[dayIndex];
+      updated[trayIndex] = tray;
       return updated;
     });
   };
@@ -88,80 +98,98 @@ export default function BatchPage() {
   return (
     <main className={styles.main}>
       <h1>Batch {batchId?.toString().padStart(3, "0")}</h1>
-      <button className={styles.backButton} onClick={() => router.push("/")}>Ana Sayfaya Dön</button>
-
+      <button className={styles.backButton} onClick={() => router.push("/")}>
+        Ana Sayfaya Dön
+      </button>
       <div className={styles.grid}>
         {trays.map((tray, index) => (
           <div
             key={index}
             className={styles.trayCard}
-            onClick={() => setSelectedTrayIndex(index)}
+            onClick={() => setModalIndex(index)}
           >
-            <div>{tray.name || "-"}</div>
+            {editIndex === index ? (
+              <input
+                type="text"
+                value={tray.name}
+                onChange={(e) =>
+                  handleFieldChange(index, "name", e.target.value)
+                }
+                onBlur={() => setEditIndex(null)}
+                autoFocus
+              />
+            ) : (
+              <div onClick={() => setEditIndex(index)}>
+                {tray.name || `Tepsi ${index + 1}`}
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      <button
-        className={styles.moveButton}
-        onClick={() => setMoveIndex(0)}
-        style={{ marginTop: "2rem" }}
-      >
-        Batch Taşı
-      </button>
+      <div className={styles.movePrompt}>
+        <label>Tepsi Taşı: </label>
+        <select
+          onChange={(e) => setMoveIndex(Number(e.target.value))}
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Tepsi seçin
+          </option>
+          {trays.map((tray, i) => (
+            <option key={i} value={i}>
+              {tray.name || `Tepsi ${i + 1}`}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Hedef Batch ID"
+          value={targetBatch}
+          onChange={(e) => setTargetBatch(e.target.value)}
+        />
+        <button onClick={handleTrayMove}>Taşı</button>
+      </div>
 
-      {moveIndex !== null && (
-        <div className={styles.movePrompt}>
-          <label>Taşınacak Batch ID:</label>
-          <input
-            type="text"
-            value={targetBatch}
-            onChange={(e) => setTargetBatch(e.target.value)}
-          />
-          <button onClick={handleTrayMove}>Taşı</button>
-          <button onClick={() => setMoveIndex(null)}>iptal</button>
-        </div>
-      )}
-
-      {selectedTrayIndex !== null && (
+      {modalIndex !== null && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <button
-              className={styles.closeModal}
-              onClick={() => setSelectedTrayIndex(null)}
+              className={styles.modalClose}
+              onClick={() => setModalIndex(null)}
             >
-              X
+              ✕
             </button>
-            <h2>Tepsi {selectedTrayIndex + 1} Detayları</h2>
-            <label>Ekim Tarihi:</label>
-            <input
-              type="date"
-              value={trays[selectedTrayIndex].sowingDate}
-              onChange={(e) =>
-                handleFieldChange(selectedTrayIndex, "sowingDate", e.target.value)
-              }
-            />
-            <label>Işığa Alım Tarihi:</label>
-            <input
-              type="date"
-              value={trays[selectedTrayIndex].lightOnDate}
-              onChange={(e) =>
-                handleFieldChange(selectedTrayIndex, "lightOnDate", e.target.value)
-              }
-            />
+            <h2>Tepsi {modalIndex + 1} Detayları</h2>
+            <label>
+              Ekim Tarihi:
+              <input
+                type="date"
+                value={trays[modalIndex].sowingDate}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "sowingDate", e.target.value)
+                }
+              />
+            </label>
+            <label>
+              Işığa Alım Tarihi:
+              <input
+                type="date"
+                value={trays[modalIndex].lightOnDate}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "lightOnDate", e.target.value)
+                }
+              />
+            </label>
             <div>
               <strong>Sulama Takvimi:</strong>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {trays[selectedTrayIndex].wateringSchedule.map((day, i) => (
+              <div className={styles.wateringGrid}>
+                {trays[modalIndex].wateringSchedule.map((val, i) => (
                   <label key={i}>
                     <input
                       type="checkbox"
-                      checked={day}
-                      onChange={() => {
-                        const updated = [...trays];
-                        updated[selectedTrayIndex].wateringSchedule[i] = !day;
-                        setTrays(updated);
-                      }}
+                      checked={val}
+                      onChange={() => handleCheckboxToggle(modalIndex, i)}
                     />
                     Gün {i + 1}
                   </label>
