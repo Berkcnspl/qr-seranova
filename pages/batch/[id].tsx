@@ -41,8 +41,8 @@ export default function BatchDetailPage() {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#000', marginBottom: '2rem' }}>
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif', background: '#000', minHeight: '100vh' }}>
+      <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#fff', marginBottom: '2rem' }}>
         Batch {id}
       </h1>
 
@@ -95,7 +95,8 @@ export default function BatchDetailPage() {
                   padding: '4px 10px',
                   borderRadius: '6px',
                   fontWeight: 600,
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  color: '#000'
                 }}
               >
                 {tepsi.bitki || '–'}
@@ -128,7 +129,8 @@ export default function BatchDetailPage() {
               width: '90%',
               maxWidth: '500px',
               boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-              position: 'relative'
+              position: 'relative',
+              color: '#000'
             }}
           >
             <button
@@ -146,11 +148,11 @@ export default function BatchDetailPage() {
               ×
             </button>
 
-            <h2 style={{ fontSize: '20px', marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '1rem', color: '#000' }}>
               Tepsi {tepsiler[openModalIndex].id} Detayları
             </h2>
 
-            <label style={{ display: 'block', marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '1rem', color: '#000' }}>
               Ekim Tarihi:
               <input
                 type="date"
@@ -164,7 +166,7 @@ export default function BatchDetailPage() {
               />
             </label>
 
-            <label style={{ display: 'block', marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '1rem', color: '#000' }}>
               Işığa Alım Tarihi:
               <input
                 type="date"
@@ -179,10 +181,12 @@ export default function BatchDetailPage() {
             </label>
 
             <div style={{ marginBottom: '1rem' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Sulama Takvimi:</div>
+              <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#000' }}>
+                Sulama Takvimi:
+              </div>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {tepsiler[openModalIndex].sulamaTakvimi.map((tikli, i) => (
-                  <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000' }}>
                     <input
                       type="checkbox"
                       checked={tikli}
