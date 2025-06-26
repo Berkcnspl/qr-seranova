@@ -70,9 +70,9 @@
   padding: 0.5rem 1.2rem;
   border-radius: 10px;
   cursor: pointer;
-  margin-left: 2rem;
-  margin-bottom: 2rem;
   font-size: 1rem;
+  display: block;             /* ← eklendi */
+  margin: 0 auto 2rem auto;   /* ← güncellendi */
 }
 .backButton:hover {
   background: #4db3ff;
@@ -189,4 +189,19 @@
   border-radius: 7px;
   font-size: 1rem;
   font-weight: 500;
+}
+/* ...diğer stiller */
+
+/* === TARİH VE SAAT ALANLARI === */
+.dateInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
