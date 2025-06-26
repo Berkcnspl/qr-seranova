@@ -1,6 +1,5 @@
 .main {
   min-height: 100vh;
-  min-width: 100vw;
   width: 100vw;
   background: #111;
   color: #fff;
@@ -9,218 +8,134 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  margin: 2.5rem 0 2rem 3rem;
+  margin: 2.5rem 0 1.5rem 0;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 2rem;
-  margin: 0 auto;
-  width: 92vw;
-  max-width: 1600px;
-  flex: 1;
-  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1.5rem;
+  width: 95vw;
+  max-width: 800px;
+  margin-bottom: 3rem;
   justify-items: center;
 }
 
-/* Mobil/tablette taşmasın */
-@media (max-width: 900px) {
-  .grid {
-    width: 99vw;
-    gap: 1rem;
-  }
-}
-@media (max-width: 700px) {
-  .grid {
-    width: 100vw;
-    gap: 0.5rem;
-    margin: 0;
-  }
-  .trayCard {
-    padding: 1rem 0.2rem;
-    min-height: 80px;
-    font-size: 1rem;
-  }
-}
-
-/* Kartlar */
 .trayCard {
   background: #232323;
-  border-radius: 2rem;
-  min-height: 120px;
+  border-radius: 1.8rem;
   width: 100%;
-  max-width: 100%;
+  max-width: 350px;
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1.5rem 1rem;
   position: relative;
-  padding: 2rem 1rem 1.5rem 1rem;
-  margin: 0;
-  box-shadow: none !important;
-  border: none !important;
-  outline: none !important;
-  overflow: hidden;
   transition: background 0.2s;
 }
 
 .trayCard:hover {
-  background: #282828;
+  background: #2a2a2a;
 }
 
 .trayName {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  width: 100%;
   text-align: center;
-  padding: 0.3rem 0.7rem;
-  border-radius: 0.5rem;
-  margin-bottom: 0.7rem;
+  padding: 0.4rem 0.8rem;
   background: rgba(255,255,255,0.04);
-  transition: background 0.15s;
+  border-radius: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 0.7rem;
 }
+
 .trayName:hover {
   background: #2b2b2b;
 }
+
 .trayNameInput {
   font-size: 1.15rem;
   font-weight: 500;
-  color: #fff;
   background: #353535;
   border: 1px solid #444;
   border-radius: 0.5rem;
   width: 95%;
   padding: 0.2rem 0.8rem;
   outline: none;
+  color: #fff;
 }
+
 .detailButton {
   position: absolute;
-  right: 1.2rem;
-  bottom: 1.2rem;
-  font-size: 0.97rem;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  font-size: 0.9rem;
   background: #1a8cff;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 0.3rem 0.85rem;
+  padding: 0.3rem 0.75rem;
   cursor: pointer;
-  transition: background 0.2s;
 }
+
 .detailButton:hover {
   background: #44aaff;
 }
-.moveSection {
-  margin: 2.5rem 0 0 3rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.moveButtonMain {
-  background: #38b548;
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  padding: 0.7rem 1.6rem;
-  font-size: 1rem;
-  transition: background 0.18s;
-  cursor: pointer;
-}
-.moveButtonMain:disabled {
-  background: #454545;
-  color: #888;
-  cursor: not-allowed;
-}
-.moveSelect, .moveInput {
-  background: #232323;
-  border: 1px solid #555;
-  color: #fff;
-  padding: 0.6rem 1rem;
-  border-radius: 7px;
-  font-size: 1rem;
-}
-.moveSelect:focus, .moveInput:focus {
-  outline: 2px solid #1a8cff;
-}
+
 .backButton {
   background: transparent;
   color: #4db3ff;
   border: 1.7px solid #4db3ff;
-  padding: 0.6rem 1.6rem;
-  border-radius: 10px;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
   cursor: pointer;
-  margin-left: 3rem;
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 500;
+  margin-bottom: 2rem;
 }
+
 .backButton:hover {
   background: #4db3ff;
   color: black;
 }
-.modalOverlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 1000;
-}
-.modalContent {
-  background: #1a1a1a;
-  padding: 2.2rem 2.2rem 2rem 2.2rem;
-  border-radius: 1.6rem;
-  width: 420px;
-  color: #fff;
-  position: relative;
-  box-shadow: 0 0 28px rgba(30,100,250,0.09);
-  border: 1.5px solid #31336e;
-}
-.modalHeader {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1.4rem;
-}
-.closeButton {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-.wateringSchedule {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  margin-top: 1rem;
-}
-.wateringSchedule label {
-  display: flex; align-items: center;
-  gap: 0.25rem;
-  background: #222;
-  padding: 0.3rem 0.85rem;
-  border-radius: 7px;
-  font-size: 0.99rem;
-  font-weight: 500;
-}
-.myDateInput {
-  background: #232323;
-  border: 1px solid #444;
-  color: #fff;
-  border-radius: 6px;
-  margin-bottom: 0.85rem;
-  margin-top: 0.14rem;
-  padding: 0.38rem 0.8rem;
-  width: 100%;
-  font-size: 1.02rem;
+
+/* Responsive ayarlar - aynı düzen korunur */
+@media (max-width: 700px) {
+  .grid {
+    gap: 1rem;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .trayCard {
+    min-height: 90px;
+    max-width: 100%;
+    padding: 1rem 0.6rem;
+  }
+
+  .trayName {
+    font-size: 1.15rem;
+  }
+
+  .detailButton {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  .backButton {
+    font-size: 1rem;
+    padding: 0.4rem 1rem;
+  }
 }
