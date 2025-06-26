@@ -10,7 +10,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body>{children}</body>
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          backgroundColor: "#111", // siyah zemin
+          color: "#fff", // beyaz yazı
+          fontFamily: "sans-serif",
+        }}
+      >
+        {children}
+      </body>
     </html>
   );
 }

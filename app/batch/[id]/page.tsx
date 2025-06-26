@@ -62,7 +62,7 @@ export default function BatchPage() {
   const handleFieldChange = (
     index: number,
     field: keyof Tray,
-    value: string
+    value: string | boolean[]
   ) => {
     setTrays((prev) => {
       const updated = [...prev];
@@ -74,7 +74,6 @@ export default function BatchPage() {
     });
   };
 
-  // ✅ YENİ Firebase uyumlu handleTrayMove
   const handleTrayMove = async () => {
     if (!moveIndex || !targetBatch || targetBatch === batchId) return;
 
@@ -261,12 +260,8 @@ export default function BatchPage() {
                       const newSchedule = [
                         ...trays[modalIndex].wateringSchedule,
                       ];
-                      newSchedule[i] = !newSchedule[i];
-                      handleFieldChange(
-                        modalIndex,
-                        "wateringSchedule",
-                        JSON.stringify(newSchedule)
-                      );
+                      newSchedule[i] = !checked;
+                      handleFieldChange(modalIndex, "wateringSchedule", newSchedule);
                     }}
                   />
                   Gün {i + 1}
