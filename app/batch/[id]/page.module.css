@@ -1,9 +1,8 @@
 .main {
   min-height: 100vh;
-  width: 100vw;
   background: #111;
   color: #fff;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   padding: 0;
   margin: 0;
   display: flex;
@@ -11,151 +10,49 @@
 }
 
 .title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin: 2rem auto 1.5rem auto;
-  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem 0 1.2rem 2rem;
 }
 
-/* Tepsiler her cihazda 2x2 düzeninde */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  justify-items: center;
-  align-items: center;
+  gap: 1.6rem;
+  margin: 0 auto;
   width: 92vw;
   max-width: 1100px;
-  margin: 0 auto;
 }
 
-/* Mobilde de 2x2 kalsın */
-@media (max-width: 600px) {
-  .grid {
-    gap: 0.8rem;
-    width: 98vw;
-  }
-}
-
-/* Tepsi Kartı */
 .trayCard {
   background: #232323;
-  border-radius: 1.6rem;
-  min-height: 110px;
+  border-radius: 1.8rem;
+  min-height: 120px;
   width: 100%;
-  max-width: 250px;
+  padding: 1.6rem 1rem 1.6rem 1rem;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 1.6rem 1rem;
-  transition: background 0.2s;
+  justify-content: center;
 }
 
-.trayCard:hover {
-  background: #282828;
-}
-
-/* Tepsi İsmi */
 .trayName {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
-  text-align: center;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.4rem;
-  margin-bottom: 0.5rem;
   background: rgba(255,255,255,0.05);
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.6rem;
   width: 100%;
+  text-align: center;
   cursor: pointer;
 }
-.trayName:hover {
-  background: #2b2b2b;
-}
-.trayNameInput {
-  font-size: 1rem;
-  font-weight: 500;
-  background: #353535;
-  color: #fff;
-  border: 1px solid #444;
-  border-radius: 0.5rem;
-  padding: 0.25rem 0.6rem;
-  width: 95%;
-}
 
-/* Modal */
-.modalOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modalContent {
-  background: #1b1b1b;
-  border-radius: 1.6rem;
-  width: 90%;
-  max-width: 420px;
-  padding: 2rem;
-  box-shadow: 0 0 30px rgba(50, 120, 255, 0.1);
-  color: #fff;
-  border: 1.5px solid #2e2e2e;
-}
-
-/* Yeni Saat Alanları */
-.timeFieldGroup {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.timeFieldGroup input {
-  flex: 1;
-  background: #232323;
-  border: 1px solid #444;
-  color: #fff;
-  padding: 0.4rem 0.7rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-}
-
-/* Sulama takvimi */
-.wateringSchedule {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-.wateringSchedule label {
-  background: #252525;
-  padding: 0.4rem 0.7rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-/* Detay kapatma */
-.closeButton {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
-}
-
-/* Butonlar */
 .detailButton {
   position: absolute;
-  right: 1rem;
+  right: 1.2rem;
   bottom: 1rem;
   font-size: 0.95rem;
   background: #1a8cff;
@@ -165,19 +62,16 @@
   padding: 0.4rem 0.9rem;
   cursor: pointer;
 }
-.detailButton:hover {
-  background: #44aaff;
-}
 
-/* Geri Butonu */
 .backButton {
   background: transparent;
   color: #4db3ff;
   border: 1.5px solid #4db3ff;
   padding: 0.5rem 1.2rem;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  margin: 1.5rem auto 0 auto;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
   font-size: 1rem;
 }
 .backButton:hover {
@@ -185,33 +79,114 @@
   color: black;
 }
 
-/* Taşıma alanı */
 .moveSection {
-  margin: 2.5rem auto 0 auto;
+  margin: 2.2rem 0 1rem 2rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
-.moveSelect, .moveInput {
-  background: #232323;
-  border: 1px solid #555;
-  color: #fff;
-  padding: 0.6rem 1rem;
-  border-radius: 7px;
-  font-size: 1rem;
-}
+
 .moveButtonMain {
   background: #38b548;
   color: #fff;
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  padding: 0.65rem 1.4rem;
+  padding: 0.6rem 1.4rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
 }
-.moveButtonMain:hover {
-  background: #3ed858;
+
+.moveButtonMain:disabled {
+  background: #444;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.moveSelect, .moveInput {
+  background: #232323;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 7px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 1.6rem;
+  width: 420px;
+  color: #fff;
+  box-shadow: 0 0 28px rgba(30,100,250,0.09);
+  border: 1.5px solid #31336e;
+}
+
+.modalHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dateTimeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dateTimeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.dateTimeRow label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.dateTimeRow input[type="date"],
+.dateTimeRow input[type="time"] {
+  background: #232323;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+}
+
+.wateringSchedule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.wateringSchedule label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #222;
+  padding: 0.4rem 0.9rem;
+  border-radius: 7px;
+  font-size: 1rem;
+  font-weight: 500;
 }
