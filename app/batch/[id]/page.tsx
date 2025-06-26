@@ -123,8 +123,9 @@ export default function BatchPage() {
         updatedSource[idx] = emptyTray;
       }
 
-      await setDoc(doc(db, "batches", batchId!), { trays: updatedSource });
-      await setDoc(doc(db, "batches", targetBatch), { trays: updatedTarget });
+      await saveBatchData(batchId!, updatedSource);
+      await saveBatchData(targetBatch, updatedTarget);
+
 
       setTrays(updatedSource);
       setMoveIndex("");
