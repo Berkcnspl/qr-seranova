@@ -13,10 +13,12 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",                      // ✨ eklendi
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "typeRoots": ["types", "node_modules/@types"] // ✨ eklendi
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types"], // ✨ eklendi
   "exclude": ["node_modules"]
 }
