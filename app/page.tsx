@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAllBatches } from "@/firebase/batchService";
 import QRCode from "react-qr-code";
-import styles from "./page.module.css";
+import styles from "./batch/[id]/page.module.css";
 
 type Batch = {
   id: string;
