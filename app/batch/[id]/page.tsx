@@ -1,6 +1,9 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
+import { getBatchData, saveBatchData } from "@/firebase/batchService";
+import { db } from "@/firebase/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
@@ -39,17 +42,20 @@ export default function BatchPage() {
   const [targetBatch, setTargetBatch] = useState<string>("");
 
   useEffect(() => {
-    if (typeof window !== "undefined" && batchId) {
-      const saved = localStorage.getItem(`batch-${batchId}`);
-      if (saved) {
-        setTrays(JSON.parse(saved));
+    const fetchData = async () => {
+      if (batchId) {
+        const data = await getBatchData(batchId);
+        if (data && Array.isArray(data.trays)) {
+          setTrays(data.trays);
+        }
       }
-    }
+    };
+    fetchData();
   }, [batchId]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && batchId) {
-      localStorage.setItem(`batch-${batchId}`, JSON.stringify(trays));
+    if (batchId) {
+      saveBatchData(batchId, trays);
     }
   }, [trays, batchId]);
 
@@ -68,37 +74,41 @@ export default function BatchPage() {
     });
   };
 
-  const handleTrayMove = () => {
+  // ✅ YENİ Firebase uyumlu handleTrayMove
+  const handleTrayMove = async () => {
     if (!moveIndex || !targetBatch || targetBatch === batchId) return;
 
-    const targetKey = `batch-${targetBatch}`;
-    const targetBatchData = localStorage.getItem(targetKey);
-    let targetTrays: Tray[] = targetBatchData
-      ? JSON.parse(targetBatchData)
-      : Array(4).fill(emptyTray);
+    try {
+      const targetDocRef = doc(db, "batches", targetBatch);
+      const targetSnap = await getDoc(targetDocRef);
+      let targetTrays: Tray[] = targetSnap.exists()
+        ? targetSnap.data()?.trays || Array(4).fill(emptyTray)
+        : Array(4).fill(emptyTray);
 
-    if (moveIndex === "all") {
+      const updatedSource = [...trays];
       const updatedTarget = [...targetTrays];
-      trays.forEach((tray, idx) => {
-        updatedTarget[idx] = tray;
-      });
-      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
-      setTrays(Array(4).fill(emptyTray));
-    } else {
-      const idx = Number(moveIndex);
-      if (isNaN(idx)) return;
-      const updatedTarget = [...targetTrays];
-      updatedTarget[idx] = trays[idx];
-      localStorage.setItem(targetKey, JSON.stringify(updatedTarget));
-      setTrays((prev) => {
-        const updated = [...prev];
-        updated[idx] = emptyTray;
-        return updated;
-      });
+
+      if (moveIndex === "all") {
+        for (let i = 0; i < 4; i++) {
+          updatedTarget[i] = trays[i];
+          updatedSource[i] = emptyTray;
+        }
+      } else {
+        const idx = Number(moveIndex);
+        if (isNaN(idx)) return;
+        updatedTarget[idx] = trays[idx];
+        updatedSource[idx] = emptyTray;
+      }
+
+      await setDoc(doc(db, "batches", batchId!), { trays: updatedSource });
+      await setDoc(doc(db, "batches", targetBatch), { trays: updatedTarget });
+
+      setTrays(updatedSource);
+      setMoveIndex("");
+      setTargetBatch("");
+    } catch (error) {
+      console.error("Tepsi taşıma sırasında hata:", error);
     }
-
-    setMoveIndex("");
-    setTargetBatch("");
   };
 
   return (
@@ -239,7 +249,9 @@ export default function BatchPage() {
             </label>
 
             <div className={styles.wateringSchedule}>
-              <strong style={{ marginBottom: "0.5rem" }}>Sulama Takvimi:</strong>
+              <strong style={{ marginBottom: "0.5rem" }}>
+                Sulama Takvimi:
+              </strong>
               {trays[modalIndex].wateringSchedule.map((checked, i) => (
                 <label key={i}>
                   <input
