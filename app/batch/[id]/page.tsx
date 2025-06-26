@@ -7,15 +7,19 @@ import styles from "./page.module.css";
 export type Tray = {
   name: string;
   sowingDate: string;
+  sowingTime?: string;
   wateringSchedule: boolean[];
   lightOnDate: string;
+  lightOnTime?: string;
 };
 
 const emptyTray: Tray = {
   name: "",
   sowingDate: "",
+  sowingTime: "",
   wateringSchedule: Array(10).fill(false),
   lightOnDate: "",
+  lightOnTime: "",
 };
 
 export default function BatchPage() {
@@ -56,22 +60,14 @@ export default function BatchPage() {
   ) => {
     setTrays((prev) => {
       const updated = [...prev];
-      if (field === "wateringSchedule") {
-        updated[index] = {
-          ...updated[index],
-          [field]: JSON.parse(value),
-        };
-      } else {
-        updated[index] = {
-          ...updated[index],
-          [field]: value,
-        };
-      }
+      updated[index] = {
+        ...updated[index],
+        [field]: value,
+      };
       return updated;
     });
   };
 
-  // DÜZ SIRAYLA taşıma fonksiyonu
   const handleTrayMove = () => {
     if (!moveIndex || !targetBatch || targetBatch === batchId) return;
 
@@ -82,7 +78,6 @@ export default function BatchPage() {
       : Array(4).fill(emptyTray);
 
     if (moveIndex === "all") {
-      // Tüm tepsileri hedef batch'e, kendi index'lerinde sıralı taşı
       const updatedTarget = [...targetTrays];
       trays.forEach((tray, idx) => {
         updatedTarget[idx] = tray;
@@ -111,9 +106,11 @@ export default function BatchPage() {
       <h1 className={styles.title}>
         Batch {batchId?.toString().padStart(3, "0")}
       </h1>
-      <button className={styles.backButton} onClick={() => router.push("/")}>
-        Ana Sayfaya Dön
-      </button>
+      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <button className={styles.backButton} onClick={() => router.push("/")}>
+          Ana Sayfa
+        </button>
+      </div>
       <div className={styles.grid}>
         {trays.map((tray, index) => (
           <div key={index} className={styles.trayCard}>
@@ -199,6 +196,7 @@ export default function BatchPage() {
                 ×
               </button>
             </div>
+
             <label>
               Ekim Tarihi:
               <input
@@ -210,7 +208,17 @@ export default function BatchPage() {
               />
             </label>
             <label>
-              Işığa Alım Tarihi:
+              Ekim Saati:
+              <input
+                type="time"
+                value={trays[modalIndex].sowingTime || ""}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "sowingTime", e.target.value)
+                }
+              />
+            </label>
+            <label>
+              Işığa Alma Tarihi:
               <input
                 type="date"
                 value={trays[modalIndex].lightOnDate}
@@ -219,8 +227,19 @@ export default function BatchPage() {
                 }
               />
             </label>
+            <label>
+              Işığa Alma Saati:
+              <input
+                type="time"
+                value={trays[modalIndex].lightOnTime || ""}
+                onChange={(e) =>
+                  handleFieldChange(modalIndex, "lightOnTime", e.target.value)
+                }
+              />
+            </label>
+
             <div className={styles.wateringSchedule}>
-              <strong>Sulama Takvimi:</strong>
+              <strong style={{ marginBottom: "0.5rem" }}>Sulama Takvimi:</strong>
               {trays[modalIndex].wateringSchedule.map((checked, i) => (
                 <label key={i}>
                   <input
