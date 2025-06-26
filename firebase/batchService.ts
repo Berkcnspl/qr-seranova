@@ -11,15 +11,23 @@ const BATCH_COLLECTION = "batches";
 
 // Tek bir batch getir (örnek: batch-001)
 export const getBatchData = async (batchId: string) => {
-  const docRef = doc(db, BATCH_COLLECTION, `batch-${batchId}`);
+  const docRef = doc(
+    db,
+    BATCH_COLLECTION,
+    batchId.startsWith("batch-") ? batchId : `batch-${batchId}`
+  );
   const docSnap = await getDoc(docRef);
   return docSnap.exists() ? docSnap.data() : null;
 };
 
 // Batch verisini kaydet
 export const saveBatchData = async (batchId: string, trays: any[]) => {
-  const docRef = doc(db, BATCH_COLLECTION, `batch-${batchId}`);
-  await setDoc(docRef, { trays });
+  const docRef = doc(
+    db,
+    BATCH_COLLECTION,
+    batchId.startsWith("batch-") ? batchId : `batch-${batchId}`
+  );
+  await setDoc(docRef, { trays }, { merge: true });
 };
 
 // Tüm batchleri getir (QR sayfası için)
