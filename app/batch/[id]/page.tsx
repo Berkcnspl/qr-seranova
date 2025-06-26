@@ -80,7 +80,8 @@ export default function BatchPage() {
     try {
       const targetDocRef = doc(db, "batches", targetBatch);
       const targetSnap = await getDoc(targetDocRef);
-      let targetTrays: Tray[] = targetSnap.exists()
+
+      const targetTrays: Tray[] = targetSnap.exists()
         ? targetSnap.data()?.trays || Array(4).fill(emptyTray)
         : Array(4).fill(emptyTray);
 
@@ -88,14 +89,37 @@ export default function BatchPage() {
       const updatedTarget = [...targetTrays];
 
       if (moveIndex === "all") {
-        for (let i = 0; i < 4; i++) {
-          updatedTarget[i] = trays[i];
-          updatedSource[i] = emptyTray;
+        const traysToMove = updatedSource.filter((tray) => tray.name !== "");
+        const emptyTargetIndices = updatedTarget
+          .map((tray, i) => (tray.name === "" ? i : -1))
+          .filter((i) => i !== -1);
+
+        if (traysToMove.length > emptyTargetIndices.length) {
+          alert("Hedef batch'te yeterli boş yer yok!");
+          return;
+        }
+
+        traysToMove.forEach((tray, i) => {
+          const targetIndex = emptyTargetIndices[i];
+          updatedTarget[targetIndex] = tray;
+        });
+
+        for (let i = 0; i < updatedSource.length; i++) {
+          if (updatedSource[i].name !== "") {
+            updatedSource[i] = emptyTray;
+          }
         }
       } else {
         const idx = Number(moveIndex);
         if (isNaN(idx)) return;
-        updatedTarget[idx] = trays[idx];
+
+        const targetIdx = updatedTarget.findIndex((tray) => tray.name === "");
+        if (targetIdx === -1) {
+          alert("Hedef batch'te boş tepsi yok!");
+          return;
+        }
+
+        updatedTarget[targetIdx] = updatedSource[idx];
         updatedSource[idx] = emptyTray;
       }
 
@@ -261,7 +285,11 @@ export default function BatchPage() {
                         ...trays[modalIndex].wateringSchedule,
                       ];
                       newSchedule[i] = !checked;
-                      handleFieldChange(modalIndex, "wateringSchedule", newSchedule);
+                      handleFieldChange(
+                        modalIndex,
+                        "wateringSchedule",
+                        newSchedule
+                      );
                     }}
                   />
                   Gün {i + 1}
