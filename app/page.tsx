@@ -147,13 +147,23 @@ export default function Home() {
 
       <div className={styles.grid}>
         {batches.map((batch) => (
-          <div key={batch.id} className={styles.batchCard}>
+          <div
+            key={batch.id}
+            className={styles.batchCard}
+            style={{ position: "relative" }} // ✅ checkbox sabitlemesi için
+          >
             {deleteMode && (
               <input
                 type="checkbox"
                 checked={selectedBatchIds.includes(batch.id)}
                 onChange={() => toggleSelectBatch(batch.id)}
-                style={{ position: "absolute", top: 8, left: 8, scale: "1.3" }}
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  left: "10px",
+                  transform: "scale(1.4)",
+                  zIndex: 1,
+                }}
               />
             )}
             <QRCode
