@@ -40,7 +40,7 @@ export default function BatchPage() {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<string>("");
   const [targetBatch, setTargetBatch] = useState<string>("");
-  const [isDataLoaded, setIsDataLoaded] = useState(false); // ✅ EKLENDİ
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +51,7 @@ export default function BatchPage() {
         } else {
           console.warn("Veri bulunamadı veya trays eksik:", data);
         }
-        setIsDataLoaded(true); // ✅ EKLENDİ
+        setIsDataLoaded(true);
       }
     };
     fetchData();
@@ -59,7 +59,7 @@ export default function BatchPage() {
 
   useEffect(() => {
     if (batchId && isDataLoaded) {
-      saveBatchData(batchId, trays); // ✅ SADECE veri geldiyse kaydet
+      saveBatchData(batchId, trays);
     }
   }, [trays, batchId, isDataLoaded]);
 
@@ -82,7 +82,11 @@ export default function BatchPage() {
     if (!moveIndex || !targetBatch || targetBatch === batchId) return;
 
     try {
-      const targetDocRef = doc(db, "batches", targetBatch);
+      const targetDocRef = doc(
+        db,
+        "batches",
+        targetBatch.startsWith("batch-") ? targetBatch : `batch-${targetBatch}`
+      );
       const targetSnap = await getDoc(targetDocRef);
 
       const targetTrays: Tray[] = targetSnap.exists()
@@ -93,23 +97,13 @@ export default function BatchPage() {
       const updatedTarget = [...targetTrays];
 
       if (moveIndex === "all") {
-        const traysToMove = updatedSource.filter((tray) => tray.name !== "");
-        const emptyTargetIndices = updatedTarget
-          .map((tray, i) => (tray.name === "" ? i : -1))
-          .filter((i) => i !== -1);
-
-        if (traysToMove.length > emptyTargetIndices.length) {
-          alert("Hedef batch'te yeterli boş yer yok!");
-          return;
-        }
-
-        traysToMove.forEach((tray, i) => {
-          const targetIndex = emptyTargetIndices[i];
-          updatedTarget[targetIndex] = tray;
-        });
-
         for (let i = 0; i < updatedSource.length; i++) {
           if (updatedSource[i].name !== "") {
+            if (updatedTarget[i].name !== "") {
+              alert(`Hedef batch'teki Tepsi ${i + 1} zaten dolu!`);
+              return;
+            }
+            updatedTarget[i] = updatedSource[i];
             updatedSource[i] = emptyTray;
           }
         }
@@ -118,9 +112,10 @@ export default function BatchPage() {
         if (isNaN(idx)) return;
 
         if (updatedTarget[idx].name !== "") {
-  alert(`Hedef batch'teki Tepsi ${idx + 1} dolu!`);
-  return;
-}
+          alert(`Hedef batch'teki Tepsi ${idx + 1} dolu!`);
+          return;
+        }
+
         updatedTarget[idx] = updatedSource[idx];
         updatedSource[idx] = emptyTray;
       }
