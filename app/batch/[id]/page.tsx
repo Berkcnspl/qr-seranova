@@ -20,7 +20,7 @@ const emptyTray: Tray = {
   name: "",
   sowingDate: "",
   sowingTime: "",
-  wateringSchedule: Array(15).fill(false), // ✅ 15 güne çıkarıldı
+  wateringSchedule: Array(15).fill(false),
   lightOnDate: "",
   lightOnTime: "",
 };
@@ -40,6 +40,7 @@ export default function BatchPage() {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<string>("");
   const [targetBatch, setTargetBatch] = useState<string>("");
+  const [clearIndex, setClearIndex] = useState<string>("");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
@@ -131,6 +132,16 @@ export default function BatchPage() {
     }
   };
 
+  const handleTrayClear = () => {
+    if (clearIndex === "") return;
+    const idx = Number(clearIndex);
+    if (isNaN(idx)) return;
+    const updated = [...trays];
+    updated[idx] = emptyTray;
+    setTrays(updated);
+    setClearIndex("");
+  };
+
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>
@@ -206,6 +217,30 @@ export default function BatchPage() {
           onChange={(e) => setTargetBatch(e.target.value)}
           className={styles.moveInput}
         />
+      </div>
+
+      <div className={styles.moveSection}>
+        <button
+          disabled={!clearIndex}
+          onClick={handleTrayClear}
+          className={styles.moveButtonMain}
+        >
+          Seçili Tepsiyi Temizle
+        </button>
+        <select
+          value={clearIndex}
+          onChange={(e) => setClearIndex(e.target.value)}
+          className={styles.moveSelect}
+        >
+          <option value="" disabled>
+            Temizlenecek Tepsiyi Seç
+          </option>
+          {trays.map((_, i) => (
+            <option key={i} value={i}>
+              Tepsi {i + 1}
+            </option>
+          ))}
+        </select>
       </div>
 
       {modalIndex !== null && (
