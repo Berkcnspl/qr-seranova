@@ -1,0 +1,78 @@
+[33m2c9ac4d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix: 'use client' hatası giderildi, page.tsx dosyası düzeltildi
+[33m7f56c2d[m Değişiklikler geri alındı.
+[33m1dfecc9[m Arkaplan görseli değiştirildi.
+[33m9e85569[m Seranova logolu arka plan görseli eklendi ve CSS düzenlendi
+[33md0168ce[m Temizle: Tüm tepsileri silme (Hepsi seçeneği) eklendi
+[33m5096f96[m ✨ Tepsi temizleme özelliği eklendi ve tüm tepsilerde sulama çizelgesi 15 güne çıkarıldı
+[33m3b43bf6[m ✅ Tepsi temizleme özelliği eklendi: Tray içeriğini sıfırlayan buton entegre edildi
+[33mcee1967[m 🧼 Modal form düzenlendi: Tarih/saat alanları alt alta ve sulama günü 15 yapıldı
+[33m4b18a77[m Style: Detaylar modalında tarih ve saat alanları alt alta sıralandı, sulama takvimi 15 güne çıkarıldı
+[33m5f04444[m Fix: Silme modunda checkbox'lar batch kartlarının sol üst köşesine hizalandı
+[33mf1b1b4e[m Feature: Ana sayfaya çoklu batch silme modu eklendi (tik ile seçme + toplu silme)
+[33m278ed74[m Fix: Tepsi taşıma işlemi hizalı hale getirildi, artık aynı index'e kopyalanıyor ve hedef batch prefix kontrolü eklendi
+[33m5d57ab8[m Fix: Tepsi taşıma işlemi hizalı yapıldı, aynı index'e kopyalanıyor
+[33md9c0b77[m Fix: Sayfa açılışında veri gelmeden önce Firestore'a boş veri yazılması engellendi (isDataLoaded kontrolü eklendi)
+[33m196f12d[m Fix: Firestore path standardizasyonu sağlandı, tüm kayıt işlemleri saveBatchData fonksiyonu üzerinden yapılıyor
+[33m8e57011[m Fix: saveBatchData ve getBatchData fonksiyonları güncellendi (merge: true + batchId format kontrolü)
+[33mf9ee3d3[m Fix: Tepsi taşıma fonksiyonu güncellendi, hedef batch'e güvenli taşıma eklendi
+[33md89a775[m Yeni batch ekleme butonu ve yönlendirme eklendi
+[33mbb95dbb[m qrcode.react tipi tanımlandı
+[33mb61914c[m CSS import path düzeltildi
+[33m0c82760[m root layout eklendi
+[33m04b5dad[m pages klasörü temizlendi, app router aktif
+[33mffd9ee1[m QR kod listeleme ve Firebase bağlantısı eklendi
+[33m1d6b77c[m page.tsx dosyası güncellendi.
+[33mde05859[m Ekim tarihi alt alta sıralandı.
+[33m6bc7b0f[m Detaylar butonu düzenlendi.
+[33m0725118[m Tasarım güncellendi.
+[33m6c37739[m Tasarım güncellemesi.
+[33m8c4080f[m Tepsi görüntüleri düzenlendir, tasarım iyileştirmesi yapıldı.
+[33me04a5d9[m Layout.tsx güncellendi.
+[33m8faba3a[m Global.css dosyası değiştirildi.
+[33m4dad483[m Margin sıfırlandı.
+[33m987c2b1[m Dosyalar tekrardan oluşturdu.
+[33m76249d6[m Beyaz border gitmiş olması lazım.
+[33mcfba8b2[m Artık siyah border'ın düzelmiş olması lazım.
+[33medc5232[m Main değiştirildi.
+[33mc8fd575[m Arka plan komple siyah yapıldı.
+[33mfe15e6e[m Box and shadow kaldırıldı.
+[33m7a6acf0[m Beyaz çerçeve sorunu giderildi.
+[33m778914c[m Mobil uyumluluk sorunları giderildi.
+[33mbf02e43[m Mobil uyumlu hale getirildi.
+[33m26d9634[m Batch id'ler kaldırıldı, tepsiler aynı düzende taşınıyor.
+[33m8de4619[m Hepsi seçeneği eklendi ve düzenlemeler yapıldı.
+[33m9d3cf36[m Label kısmı düzeltildi.
+[33m0850d2c[m Hatalar giderildi
+[33mb8a54e3[m Batch takip sayfası siyah tema, antrasit tepsi kartları ve 2x2 grid düzeni, tepsi ismi düzenleme düzeltildi
+[33m74e183f[m Hatalar giderildi..
+[33me5daa95[m Hatalar giderildi.
+[33mbda3692[m Batch detay modalı eklendi, taşıma alanı düzenlendi, stil dosyası ve sayfa dosyası güncellendi
+[33m94e6595[m Fix batch detail modal, move batch button, and CSS issues
+[33ma24c0fb[m Move page.module.css to [id] folder to fix module not found error
+[33m73b61a6[m Update batch detail page styles with modal and move section improvements
+[33m0bb1b43[m Fix: batch detay modal ve stil uyumu güncellendi
+[33madbb582[m Fix: Add layout to batch/[id] route
+[33m74c5053[m Fix [id] route by moving to app router structure
+[33m4969743[m Tepsi modal detay yapısı eklendi, batch taşıma butonu merkezi hale getirildi
+[33m8405dde[m Fix [id] page build error and redesign tray transfer logic
+[33m51a8c76[m Fix /batch/[id] page: SSR uyumlu useParams kullanımı, build hatası düzeltildi, tray taşıma sadeleştirildi
+[33m6b3c70b[m Batch taşıma işlemini sadeleştirdik, her kart yerine tek butonla taşıma eklendi
+[33m21803a6[m Fix: useRouter yerine params.id hatası giderildi ve batch taşıma sistemi düzeltildi
+[33mf97e44c[m fix: added missing page.module.css for batch page
+[33m819f314[m Hatalar giderildi.
+[33mbd97502[m ✨ Tray taşıma özelliği ve type hataları düzeltildi
+[33md7535ce[m ✅ Batch taşıma, localStorage fix, dönüş butonu güncellemesi
+[33mbdf827e[m Batch taşı özelliği eklendi
+[33m51cef8e[m Batch taşıma özelliği eklendi
+[33md2e661f[m Logo tekrar düzenlendi.
+[33me1fc221[m Logo değiştirildi
+[33me3b058f[m Logo dosya ismi düzeltildi
+[33m4502569[m Ana sayfa üstüne logo ve Batch Takip Sistemi yazısı eklendi
+[33m360f618[m LocalStorage desteği ve ana sayfaya dön butonu eklendi
+[33m2e0b76b[m Tepsiler antrasit yapıldı, yazılar beyaz, tasarım sadeleştirildi
+[33m1eab270[m Ana sayfadaki batch kart yazı renkleri siyah yapıldı
+[33m4ed6e53[m Yazı renkleri siyah yapıldı, görünürlük artırıldı
+[33m80735b0[m Tepsi kart tasarımı, hızlı düzenleme ve modal çıkışı düzeltildi
+[33mcbde5fc[m Modal ile tepsi detayları (ekim tarihi, ışık, sulama) eklendi
+[33mbfa8e49[m 84 batch listesi ve batch detay sayfası oluşturuldu
+[33mb373430[m İlk commit: qr.seranova.net projesi
