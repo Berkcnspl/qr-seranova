@@ -20,7 +20,7 @@ const emptyTray: Tray = {
   name: "",
   sowingDate: "",
   sowingTime: "",
-  wateringSchedule: Array(10).fill(false),
+  wateringSchedule: Array(15).fill(false), // ✅ 15 güne çıkarıldı
   lightOnDate: "",
   lightOnTime: "",
 };
@@ -227,46 +227,48 @@ export default function BatchPage() {
               </button>
             </div>
 
-            <label>
-              Ekim Tarihi:
-              <input
-                type="date"
-                value={trays[modalIndex].sowingDate}
-                onChange={(e) =>
-                  handleFieldChange(modalIndex, "sowingDate", e.target.value)
-                }
-              />
-            </label>
-            <label>
-              Ekim Saati:
-              <input
-                type="time"
-                value={trays[modalIndex].sowingTime || ""}
-                onChange={(e) =>
-                  handleFieldChange(modalIndex, "sowingTime", e.target.value)
-                }
-              />
-            </label>
-            <label>
-              Işığa Alma Tarihi:
-              <input
-                type="date"
-                value={trays[modalIndex].lightOnDate}
-                onChange={(e) =>
-                  handleFieldChange(modalIndex, "lightOnDate", e.target.value)
-                }
-              />
-            </label>
-            <label>
-              Işığa Alma Saati:
-              <input
-                type="time"
-                value={trays[modalIndex].lightOnTime || ""}
-                onChange={(e) =>
-                  handleFieldChange(modalIndex, "lightOnTime", e.target.value)
-                }
-              />
-            </label>
+            <div className={styles.modalForm}>
+              <label>
+                Ekim Tarihi:
+                <input
+                  type="date"
+                  value={trays[modalIndex].sowingDate}
+                  onChange={(e) =>
+                    handleFieldChange(modalIndex, "sowingDate", e.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Ekim Saati:
+                <input
+                  type="time"
+                  value={trays[modalIndex].sowingTime || ""}
+                  onChange={(e) =>
+                    handleFieldChange(modalIndex, "sowingTime", e.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Işığa Alma Tarihi:
+                <input
+                  type="date"
+                  value={trays[modalIndex].lightOnDate}
+                  onChange={(e) =>
+                    handleFieldChange(modalIndex, "lightOnDate", e.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Işığa Alma Saati:
+                <input
+                  type="time"
+                  value={trays[modalIndex].lightOnTime || ""}
+                  onChange={(e) =>
+                    handleFieldChange(modalIndex, "lightOnTime", e.target.value)
+                  }
+                />
+              </label>
+            </div>
 
             <div className={styles.wateringSchedule}>
               <strong style={{ marginBottom: "0.5rem" }}>
