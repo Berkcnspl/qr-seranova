@@ -191,7 +191,6 @@
   font-weight: 500;
 }
 
-/* === TARİH VE SAAT ALANLARI === */
 .dateInputs {
   display: flex;
   flex-direction: column;
@@ -246,10 +245,32 @@
   color: #fff;
 }
 
-/* ✅ Yeni eklendi: Modal form içindeki alanları alt alta sıralar */
 .modalForm {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    width: 90vw;
+    padding: 1.5rem;
+  }
+
+  .modalForm label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+  }
+
+  .modalForm input {
+    margin-top: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .wateringSchedule label {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
+  }
 }
