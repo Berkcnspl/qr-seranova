@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAllBatches } from "@/firebase/batchService";
 import { db } from "@/firebase/firebase";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import QRCode from "react-qr-code";
 import styles from "./page.module.css";
 
@@ -40,15 +46,42 @@ async function createNewBatch(): Promise<string> {
 
 export default function Home() {
   const [batches, setBatches] = useState<Batch[]>([]);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [selectedBatchIds, setSelectedBatchIds] = useState<string[]>([]);
   const router = useRouter();
 
+  const fetchBatches = async () => {
+    const data = await getAllBatches();
+    setBatches(data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllBatches();
-      setBatches(data);
-    };
-    fetchData();
+    fetchBatches();
   }, []);
+
+  const toggleSelectBatch = (batchId: string) => {
+    setSelectedBatchIds((prev) =>
+      prev.includes(batchId)
+        ? prev.filter((id) => id !== batchId)
+        : [...prev, batchId]
+    );
+  };
+
+  const handleDeleteSelected = async () => {
+    const confirmed = confirm(
+      `${selectedBatchIds.length} batch silinsin mi? Geri alınamaz!`
+    );
+    if (!confirmed) return;
+
+    await Promise.all(
+      selectedBatchIds.map((batchId) =>
+        deleteDoc(doc(db, "batches", batchId))
+      )
+    );
+    setSelectedBatchIds([]);
+    setDeleteMode(false);
+    fetchBatches();
+  };
 
   return (
     <main className={styles.main}>
@@ -68,17 +101,66 @@ export default function Home() {
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
+            marginRight: "1rem",
           }}
         >
           + Yeni Batch Ekle
         </button>
+
+        <button
+          onClick={() => {
+            setDeleteMode(!deleteMode);
+            setSelectedBatchIds([]);
+          }}
+          style={{
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#d63031",
+            color: "#fff",
+            fontSize: "1rem",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          {deleteMode ? "İptal" : "Batch Sil"}
+        </button>
       </div>
+
+      {deleteMode && selectedBatchIds.length > 0 && (
+        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+          <button
+            onClick={handleDeleteSelected}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: "#c0392b",
+              color: "white",
+              fontSize: "0.95rem",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Seçili Batchleri Sil
+          </button>
+        </div>
+      )}
 
       <div className={styles.grid}>
         {batches.map((batch) => (
           <div key={batch.id} className={styles.batchCard}>
+            {deleteMode && (
+              <input
+                type="checkbox"
+                checked={selectedBatchIds.includes(batch.id)}
+                onChange={() => toggleSelectBatch(batch.id)}
+                style={{ position: "absolute", top: 8, left: 8, scale: "1.3" }}
+              />
+            )}
             <QRCode
-              value={`https://qr.seranova.net/batch/${batch.id.replace("batch-", "")}`}
+              value={`https://qr.seranova.net/batch/${batch.id.replace(
+                "batch-",
+                ""
+              )}`}
               size={128}
             />
             <p
