@@ -41,7 +41,7 @@ export default function BatchPage() {
   const [moveIndex, setMoveIndex] = useState<string>("");
   const [targetBatch, setTargetBatch] = useState<string>("");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [clearIndex, setClearIndex] = useState<number | null>(null);
+  const [clearIndex, setClearIndex] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,11 +139,19 @@ export default function BatchPage() {
   };
 
   const handleClearTray = async () => {
-    if (clearIndex === null) return;
+    if (clearIndex === "") return;
     const updatedTrays = [...trays];
-    updatedTrays[clearIndex] = emptyTray;
+    if (clearIndex === "all") {
+      for (let i = 0; i < updatedTrays.length; i++) {
+        updatedTrays[i] = emptyTray;
+      }
+    } else {
+      const idx = Number(clearIndex);
+      if (isNaN(idx)) return;
+      updatedTrays[idx] = emptyTray;
+    }
     setTrays(updatedTrays);
-    setClearIndex(null);
+    setClearIndex("");
     await saveBatchData(batchId!, updatedTrays);
   };
 
@@ -214,17 +222,18 @@ export default function BatchPage() {
           className={styles.moveInput}
         />
         <select
-          value={clearIndex !== null ? clearIndex : ""}
-          onChange={(e) => setClearIndex(Number(e.target.value))}
+          value={clearIndex}
+          onChange={(e) => setClearIndex(e.target.value)}
           className={styles.moveSelect}
         >
           <option value="" disabled>Temizlenecek Tepsiyi Seç</option>
+          <option value="all">Hepsi</option>
           {trays.map((_, i) => (
             <option key={i} value={i}>Tepsi {i + 1}</option>
           ))}
         </select>
         <button
-          disabled={clearIndex === null}
+          disabled={!clearIndex}
           onClick={handleClearTray}
           className={styles.moveButtonMain}
           style={{ backgroundColor: "#c0392b" }}
