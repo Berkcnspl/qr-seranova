@@ -40,24 +40,28 @@ export default function BatchPage() {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
   const [moveIndex, setMoveIndex] = useState<string>("");
   const [targetBatch, setTargetBatch] = useState<string>("");
+  const [isDataLoaded, setIsDataLoaded] = useState(false); // ✅ EKLENDİ
 
   useEffect(() => {
     const fetchData = async () => {
       if (batchId) {
         const data = await getBatchData(batchId);
-        if (data && Array.isArray(data.trays)) {
+        if (data?.trays && Array.isArray(data.trays)) {
           setTrays(data.trays);
+        } else {
+          console.warn("Veri bulunamadı veya trays eksik:", data);
         }
+        setIsDataLoaded(true); // ✅ EKLENDİ
       }
     };
     fetchData();
   }, [batchId]);
 
   useEffect(() => {
-    if (batchId) {
-      saveBatchData(batchId, trays);
+    if (batchId && isDataLoaded) {
+      saveBatchData(batchId, trays); // ✅ SADECE veri geldiyse kaydet
     }
-  }, [trays, batchId]);
+  }, [trays, batchId, isDataLoaded]);
 
   const handleFieldChange = (
     index: number,
@@ -125,7 +129,6 @@ export default function BatchPage() {
 
       await saveBatchData(batchId!, updatedSource);
       await saveBatchData(targetBatch, updatedTarget);
-
 
       setTrays(updatedSource);
       setMoveIndex("");
