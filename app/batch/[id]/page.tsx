@@ -117,13 +117,11 @@ export default function BatchPage() {
         const idx = Number(moveIndex);
         if (isNaN(idx)) return;
 
-        const targetIdx = updatedTarget.findIndex((tray) => tray.name === "");
-        if (targetIdx === -1) {
-          alert("Hedef batch'te boş tepsi yok!");
-          return;
-        }
-
-        updatedTarget[targetIdx] = updatedSource[idx];
+        if (updatedTarget[idx].name !== "") {
+  alert(`Hedef batch'teki Tepsi ${idx + 1} dolu!`);
+  return;
+}
+        updatedTarget[idx] = updatedSource[idx];
         updatedSource[idx] = emptyTray;
       }
 
