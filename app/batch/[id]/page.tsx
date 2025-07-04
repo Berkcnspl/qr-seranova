@@ -243,66 +243,85 @@ export default function BatchPage() {
       </div>
 
       {modalIndex !== null && (
-        <div className={styles.modalOverlay} onClick={() => setModalIndex(null)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>Tepsi {modalIndex + 1} Detayları</h2>
-              <button className={styles.closeButton} onClick={() => setModalIndex(null)}>×</button>
-            </div>
-            <div className={styles.modalForm}>
-              <label>
-                Ekim Tarihi:
-                <input
-                  type="date"
-                  value={trays[modalIndex].sowingDate}
-                  onChange={(e) => handleFieldChange(modalIndex, "sowingDate", e.target.value)}
-                />
-              </label>
-              <label>
-                Ekim Saati:
-                <input
-                  type="time"
-                  value={trays[modalIndex].sowingTime || ""}
-                  onChange={(e) => handleFieldChange(modalIndex, "sowingTime", e.target.value)}
-                />
-              </label>
-              <label>
-                Işığa Alma Tarihi:
-                <input
-                  type="date"
-                  value={trays[modalIndex].lightOnDate}
-                  onChange={(e) => handleFieldChange(modalIndex, "lightOnDate", e.target.value)}
-                />
-              </label>
-              <label>
-                Işığa Alma Saati:
-                <input
-                  type="time"
-                  value={trays[modalIndex].lightOnTime || ""}
-                  onChange={(e) => handleFieldChange(modalIndex, "lightOnTime", e.target.value)}
-                />
-              </label>
-            </div>
-            <div className={styles.wateringSchedule}>
-              <strong style={{ marginBottom: "0.5rem" }}>Sulama Takvimi:</strong>
-              {trays[modalIndex].wateringSchedule.map((checked, i) => (
-                <label key={i}>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={() => {
-                      const newSchedule = [...trays[modalIndex].wateringSchedule];
-                      newSchedule[i] = !checked;
-                      handleFieldChange(modalIndex, "wateringSchedule", newSchedule);
-                    }}
-                  />
-                  Gün {i + 1}
-                </label>
-              ))}
-            </div>
-          </div>
+  <div className={styles.modalOverlay} onClick={() => setModalIndex(null)}>
+    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalHeader}>
+        <h2 className={styles.modalTitle}>Tepsi {modalIndex + 1} Detayları</h2>
+        <button className={styles.closeButton} onClick={() => setModalIndex(null)}>×</button>
+      </div>
+
+      <div className={styles.modalForm}>
+        <div className={styles.dateTimeRow}>
+          <label>
+            Ekim Tarihi:
+            <input
+              type="date"
+              value={trays[modalIndex].sowingDate}
+              onChange={(e) =>
+                handleFieldChange(modalIndex, "sowingDate", e.target.value)
+              }
+            />
+          </label>
+          <label>
+            Ekim Saati:
+            <input
+              type="time"
+              value={trays[modalIndex].sowingTime || ""}
+              onChange={(e) =>
+                handleFieldChange(modalIndex, "sowingTime", e.target.value)
+              }
+            />
+          </label>
         </div>
-      )}
-    </main>
-  );
+
+        <div className={styles.dateTimeRow}>
+          <label>
+            Işığa Alma Tarihi:
+            <input
+              type="date"
+              value={trays[modalIndex].lightOnDate}
+              onChange={(e) =>
+                handleFieldChange(modalIndex, "lightOnDate", e.target.value)
+              }
+            />
+          </label>
+          <label>
+            Işığa Alma Saati:
+            <input
+              type="time"
+              value={trays[modalIndex].lightOnTime || ""}
+              onChange={(e) =>
+                handleFieldChange(modalIndex, "lightOnTime", e.target.value)
+              }
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className={styles.wateringSchedule}>
+        <strong style={{ marginBottom: "0.5rem" }}>Sulama Takvimi:</strong>
+        {trays[modalIndex].wateringSchedule.map((checked, i) => (
+          <label key={i}>
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => {
+                const newSchedule = [...trays[modalIndex].wateringSchedule];
+                newSchedule[i] = !checked;
+                handleFieldChange(
+                  modalIndex,
+                  "wateringSchedule",
+                  newSchedule
+                );
+              }}
+            />
+            Gün {i + 1}
+          </label>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+</main>
+);
 }
