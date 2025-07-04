@@ -218,3 +218,29 @@
     padding: 0.4rem 0.6rem;
   }
 }
+
+.batchCard {
+  background-color: #1f1f1f;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+
+  /* >>> EKLENDİ: QR ve yazıyı ortalamak için */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* <<< */
+}
+
+.batchLabel {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #fff;
+
+  /* >>> EKLENDİ: Yazının ortalı görünmesi için */
+  text-align: center;
+  width: 100%;
+  /* <<< */
+}
