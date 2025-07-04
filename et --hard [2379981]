@@ -1,0 +1,88 @@
+[33m23101a2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: commit: Mobilde modal içeriği geliştirildi, tarih-saat hizalaması ve sulama takvimi düzenlendi
+[33m2379981[m HEAD@{1}: commit: QR ve batch isimleri ortalandı (mobil ve masaüstü için)
+[33mfcd3554[m HEAD@{2}: commit: Modal stilini iyileştirildi: çarpı butonu ve mobil uyum güncellendi
+[33m8067b2a[m HEAD@{3}: commit: Eskiye dönüldü.
+[33md0168ce[m HEAD@{4}: reset: moving to d0168ce
+[33md0168ce[m HEAD@{5}: checkout: moving from main to main
+[33md0168ce[m HEAD@{6}: reset: moving to d0168ce
+[33md0168ce[m HEAD@{7}: reset: moving to d0168ce
+[33m2c9ac4d[m HEAD@{8}: checkout: moving from main to main
+[33m2c9ac4d[m HEAD@{9}: commit: Fix: 'use client' hatası giderildi, page.tsx dosyası düzeltildi
+[33m7f56c2d[m HEAD@{10}: commit: Değişiklikler geri alındı.
+[33m1dfecc9[m HEAD@{11}: commit: Arkaplan görseli değiştirildi.
+[33m9e85569[m HEAD@{12}: commit: Seranova logolu arka plan görseli eklendi ve CSS düzenlendi
+[33md0168ce[m HEAD@{13}: commit: Temizle: Tüm tepsileri silme (Hepsi seçeneği) eklendi
+[33m5096f96[m HEAD@{14}: commit: ✨ Tepsi temizleme özelliği eklendi ve tüm tepsilerde sulama çizelgesi 15 güne çıkarıldı
+[33m3b43bf6[m HEAD@{15}: commit: ✅ Tepsi temizleme özelliği eklendi: Tray içeriğini sıfırlayan buton entegre edildi
+[33mcee1967[m HEAD@{16}: commit: 🧼 Modal form düzenlendi: Tarih/saat alanları alt alta ve sulama günü 15 yapıldı
+[33m4b18a77[m HEAD@{17}: commit: Style: Detaylar modalında tarih ve saat alanları alt alta sıralandı, sulama takvimi 15 güne çıkarıldı
+[33m5f04444[m HEAD@{18}: commit: Fix: Silme modunda checkbox'lar batch kartlarının sol üst köşesine hizalandı
+[33mf1b1b4e[m HEAD@{19}: commit: Feature: Ana sayfaya çoklu batch silme modu eklendi (tik ile seçme + toplu silme)
+[33m278ed74[m HEAD@{20}: commit: Fix: Tepsi taşıma işlemi hizalı hale getirildi, artık aynı index'e kopyalanıyor ve hedef batch prefix kontrolü eklendi
+[33m5d57ab8[m HEAD@{21}: commit: Fix: Tepsi taşıma işlemi hizalı yapıldı, aynı index'e kopyalanıyor
+[33md9c0b77[m HEAD@{22}: commit: Fix: Sayfa açılışında veri gelmeden önce Firestore'a boş veri yazılması engellendi (isDataLoaded kontrolü eklendi)
+[33m196f12d[m HEAD@{23}: commit: Fix: Firestore path standardizasyonu sağlandı, tüm kayıt işlemleri saveBatchData fonksiyonu üzerinden yapılıyor
+[33m8e57011[m HEAD@{24}: commit: Fix: saveBatchData ve getBatchData fonksiyonları güncellendi (merge: true + batchId format kontrolü)
+[33mf9ee3d3[m HEAD@{25}: commit: Fix: Tepsi taşıma fonksiyonu güncellendi, hedef batch'e güvenli taşıma eklendi
+[33md89a775[m HEAD@{26}: commit: Yeni batch ekleme butonu ve yönlendirme eklendi
+[33mbb95dbb[m HEAD@{27}: commit: qrcode.react tipi tanımlandı
+[33mb61914c[m HEAD@{28}: commit: CSS import path düzeltildi
+[33m0c82760[m HEAD@{29}: commit: root layout eklendi
+[33m04b5dad[m HEAD@{30}: commit: pages klasörü temizlendi, app router aktif
+[33mffd9ee1[m HEAD@{31}: commit: QR kod listeleme ve Firebase bağlantısı eklendi
+[33m1d6b77c[m HEAD@{32}: commit: page.tsx dosyası güncellendi.
+[33mde05859[m HEAD@{33}: commit: Ekim tarihi alt alta sıralandı.
+[33m6bc7b0f[m HEAD@{34}: commit: Detaylar butonu düzenlendi.
+[33m0725118[m HEAD@{35}: commit: Tasarım güncellendi.
+[33m6c37739[m HEAD@{36}: commit: Tasarım güncellemesi.
+[33m8c4080f[m HEAD@{37}: commit: Tepsi görüntüleri düzenlendir, tasarım iyileştirmesi yapıldı.
+[33me04a5d9[m HEAD@{38}: commit: Layout.tsx güncellendi.
+[33m8faba3a[m HEAD@{39}: commit: Global.css dosyası değiştirildi.
+[33m4dad483[m HEAD@{40}: commit: Margin sıfırlandı.
+[33m987c2b1[m HEAD@{41}: commit: Dosyalar tekrardan oluşturdu.
+[33m76249d6[m HEAD@{42}: commit: Beyaz border gitmiş olması lazım.
+[33mcfba8b2[m HEAD@{43}: commit: Artık siyah border'ın düzelmiş olması lazım.
+[33medc5232[m HEAD@{44}: commit: Main değiştirildi.
+[33mc8fd575[m HEAD@{45}: commit: Arka plan komple siyah yapıldı.
+[33mfe15e6e[m HEAD@{46}: commit: Box and shadow kaldırıldı.
+[33m7a6acf0[m HEAD@{47}: commit: Beyaz çerçeve sorunu giderildi.
+[33m778914c[m HEAD@{48}: commit: Mobil uyumluluk sorunları giderildi.
+[33mbf02e43[m HEAD@{49}: commit: Mobil uyumlu hale getirildi.
+[33m26d9634[m HEAD@{50}: commit: Batch id'ler kaldırıldı, tepsiler aynı düzende taşınıyor.
+[33m8de4619[m HEAD@{51}: commit: Hepsi seçeneği eklendi ve düzenlemeler yapıldı.
+[33m9d3cf36[m HEAD@{52}: commit: Label kısmı düzeltildi.
+[33m0850d2c[m HEAD@{53}: commit: Hatalar giderildi
+[33mb8a54e3[m HEAD@{54}: commit: Batch takip sayfası siyah tema, antrasit tepsi kartları ve 2x2 grid düzeni, tepsi ismi düzenleme düzeltildi
+[33m74e183f[m HEAD@{55}: commit: Hatalar giderildi..
+[33me5daa95[m HEAD@{56}: commit: Hatalar giderildi.
+[33mbda3692[m HEAD@{57}: commit: Batch detay modalı eklendi, taşıma alanı düzenlendi, stil dosyası ve sayfa dosyası güncellendi
+[33m94e6595[m HEAD@{58}: commit: Fix batch detail modal, move batch button, and CSS issues
+[33ma24c0fb[m HEAD@{59}: commit: Move page.module.css to [id] folder to fix module not found error
+[33m73b61a6[m HEAD@{60}: commit: Update batch detail page styles with modal and move section improvements
+[33m0bb1b43[m HEAD@{61}: commit: Fix: batch detay modal ve stil uyumu güncellendi
+[33madbb582[m HEAD@{62}: commit: Fix: Add layout to batch/[id] route
+[33m74c5053[m HEAD@{63}: commit: Fix [id] route by moving to app router structure
+[33m4969743[m HEAD@{64}: commit: Tepsi modal detay yapısı eklendi, batch taşıma butonu merkezi hale getirildi
+[33m8405dde[m HEAD@{65}: commit: Fix [id] page build error and redesign tray transfer logic
+[33m51a8c76[m HEAD@{66}: commit: Fix /batch/[id] page: SSR uyumlu useParams kullanımı, build hatası düzeltildi, tray taşıma sadeleştirildi
+[33m6b3c70b[m HEAD@{67}: commit: Batch taşıma işlemini sadeleştirdik, her kart yerine tek butonla taşıma eklendi
+[33m21803a6[m HEAD@{68}: commit: Fix: useRouter yerine params.id hatası giderildi ve batch taşıma sistemi düzeltildi
+[33mf97e44c[m HEAD@{69}: commit: fix: added missing page.module.css for batch page
+[33m819f314[m HEAD@{70}: commit: Hatalar giderildi.
+[33mbd97502[m HEAD@{71}: commit: ✨ Tray taşıma özelliği ve type hataları düzeltildi
+[33md7535ce[m HEAD@{72}: commit: ✅ Batch taşıma, localStorage fix, dönüş butonu güncellemesi
+[33mbdf827e[m HEAD@{73}: commit: Batch taşı özelliği eklendi
+[33m51cef8e[m HEAD@{74}: commit: Batch taşıma özelliği eklendi
+[33md2e661f[m HEAD@{75}: commit: Logo tekrar düzenlendi.
+[33me1fc221[m HEAD@{76}: commit: Logo değiştirildi
+[33me3b058f[m HEAD@{77}: commit: Logo dosya ismi düzeltildi
+[33m4502569[m HEAD@{78}: commit: Ana sayfa üstüne logo ve Batch Takip Sistemi yazısı eklendi
+[33m360f618[m HEAD@{79}: commit: LocalStorage desteği ve ana sayfaya dön butonu eklendi
+[33m2e0b76b[m HEAD@{80}: commit: Tepsiler antrasit yapıldı, yazılar beyaz, tasarım sadeleştirildi
+[33m1eab270[m HEAD@{81}: commit: Ana sayfadaki batch kart yazı renkleri siyah yapıldı
+[33m4ed6e53[m HEAD@{82}: commit: Yazı renkleri siyah yapıldı, görünürlük artırıldı
+[33m80735b0[m HEAD@{83}: commit: Tepsi kart tasarımı, hızlı düzenleme ve modal çıkışı düzeltildi
+[33mcbde5fc[m HEAD@{84}: commit: Modal ile tepsi detayları (ekim tarihi, ışık, sulama) eklendi
+[33mbfa8e49[m HEAD@{85}: commit: 84 batch listesi ve batch detay sayfası oluşturuldu
+[33mb373430[m HEAD@{86}: Branch: renamed refs/heads/master to refs/heads/main
+[33mb373430[m HEAD@{88}: commit (initial): İlk commit: qr.seranova.net projesi
