@@ -8,8 +8,9 @@
 
   display: flex;
   flex-direction: column;
-  align-items: center; /* YATAY ORTALA */
-  justify-content: flex-start; /* DİKEYDE ÜSTTEN BAŞLAT */
+  align-items: center; /* ✅ Ortalamayı sağlar */
+  justify-content: center; /* ✅ Dikeyde de ortalama için */
+  text-align: center; /* ✅ Yazıları ortala */
 }
 
 .title {
@@ -253,3 +254,10 @@
   color: #fff;
 }
 
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+    align-items: center;
+    justify-content: flex-start; /* Yukarıdan başlasın ama yatayda ortalansın */
+  }
+}
