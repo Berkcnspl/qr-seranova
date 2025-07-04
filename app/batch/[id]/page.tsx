@@ -157,7 +157,7 @@ export default function BatchPage() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>Batch 001</h1>
+      <h1 className={styles.title}>Batch {batchId?.toString().padStart(3, "0")}</h1>
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
         <button className={styles.backButton} onClick={() => router.push("/")}>Ana Sayfa</button>
       </div>
