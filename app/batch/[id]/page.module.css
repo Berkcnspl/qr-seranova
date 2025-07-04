@@ -261,3 +261,11 @@
     justify-content: flex-start; /* Yukarıdan başlasın ama yatayda ortalansın */
   }
 }
+
+@media (max-width: 600px) {
+  .trayCard {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
