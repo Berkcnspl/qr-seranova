@@ -226,9 +226,10 @@
   align-items: center;
 }
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+.batchTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem auto 1.2rem auto;
   text-align: center;
 }
 
