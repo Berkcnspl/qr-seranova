@@ -1,179 +1,244 @@
+/* Organic-Modern Agriculture - Batch Detail */
 .main {
   min-height: 100vh;
-  background: #111;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
-  padding: 0;
-  margin: 0;
-
+  background: var(--color-bg, #1A1C18);
+  color: var(--color-text, #e8ebe4);
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ Ortalamayı sağlar */
-  justify-content: center; /* ✅ Dikeyde de ortalama için */
-  text-align: center; /* ✅ Yazıları ortala */
+  align-items: center;
+  text-align: center;
 }
 
 .title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 2rem 0 1.2rem 2rem;
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  width: 100%;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.6rem;
-  width: 92vw;
-  max-width: 1100px;
-  justify-content: center; /* ORTALA */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .trayCard {
-  background: #232323;
-  border-radius: 1.8rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   min-height: 120px;
-  width: 100%;
-  padding: 1.6rem 1rem 1.6rem 1rem;
+  padding: 1.25rem 1rem;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-card);
 }
 
 .trayName {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
-  background: rgba(255,255,255,0.05);
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.5rem;
-  margin-bottom: 0.6rem;
+  color: var(--color-text);
+  background: rgba(102, 139, 35, 0.12);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
   width: 100%;
   text-align: center;
   cursor: pointer;
 }
 
+.trayNameInput {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-core, #668B23);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
+  outline: none;
+}
+
 .detailButton {
   position: absolute;
-  right: 1.2rem;
+  right: 1rem;
   bottom: 1rem;
-  font-size: 0.95rem;
-  background: #1a8cff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--color-core, #668B23);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.detailButton:hover {
+  background: var(--color-core-hover, #7aa328);
+}
+
+.backButtonWrapper {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .backButton {
   background: transparent;
-  color: #4db3ff;
-  border: 1.5px solid #4db3ff;
+  color: var(--color-core, #668B23);
+  border: 1.5px solid var(--color-core);
   padding: 0.5rem 1.2rem;
-  border-radius: 10px;
+  min-height: 44px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
-  display: block;             /* ← eklendi */
-  margin: 0 auto 2rem auto;   /* ← güncellendi */
+  font-weight: 500;
 }
 .backButton:hover {
-  background: #4db3ff;
-  color: black;
+  background: var(--color-core);
+  color: #fff;
 }
 
 .moveSection {
-  margin: 2.2rem 0 1rem 2rem;
+  margin: 2rem 0 1rem 0;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 960px;
 }
 
 .moveButtonMain {
-  background: #38b548;
+  background: var(--color-core, #668B23);
   color: #fff;
   font-weight: 600;
   border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1.4rem;
-  font-size: 1rem;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.moveButtonMain:hover:not(:disabled) {
+  background: var(--color-core-hover, #7aa328);
 }
 
 .moveButtonMain:disabled {
-  background: #444;
-  color: #aaa;
+  background: var(--color-border);
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
-.moveSelect, .moveInput {
-  background: #232323;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 7px;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
+.moveButtonDanger {
+  background: #8b3a2a;
+}
+.moveButtonDanger:hover:not(:disabled) {
+  background: #a04532;
 }
 
+.moveSelect,
+.moveInput {
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.95rem;
+}
+
+/* Modal - Soft Industrial */
 .modalOverlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex; justify-content: center; align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modalContent {
-  background: #1a1a1a;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
   padding: 2rem;
-  border-radius: 1.6rem;
+  border-radius: 8px;
   width: 420px;
-  color: #fff;
-  box-shadow: 0 0 28px rgba(30,100,250,0.09);
-  border: 1.5px solid #31336e;
+  max-width: 95vw;
+  color: var(--color-text);
+  box-shadow: var(--shadow-card);
 }
 
 .modalHeader {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: #fff;
-  font-size: 1.3rem;
+  color: var(--color-text-muted);
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
+  line-height: 1;
+}
+.closeButton:hover {
+  color: var(--color-text);
 }
 
-.dateTimeGroup {
+.modalForm {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 .dateTimeRow {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .dateTimeRow label {
   flex: 1;
+  min-width: 140px;
   display: flex;
   flex-direction: column;
 }
 
 .dateTimeRow input[type="date"],
 .dateTimeRow input[type="time"] {
-  background: #232323;
-  border: 1px solid #444;
-  color: #fff;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
   font-size: 1rem;
@@ -184,93 +249,150 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
-  justify-content: flex-start;
+}
+
+.wateringSchedule strong {
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
 }
 
 .wateringSchedule label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #222;
-  padding: 0.4rem 0.9rem;
-  border-radius: 7px;
-  font-size: 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
   font-weight: 500;
-}
-/* ...diğer stiller */
-
-/* === TARİH VE SAAT ALANLARI === */
-.dateInputs {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  cursor: pointer;
 }
 
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+.wateringSchedule input[type="checkbox"] {
+  accent-color: var(--color-core);
 }
 
-.row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.main {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.batchTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 2rem auto 1.2rem auto;
-  text-align: center;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2rem;
-  width: 100%;
-  max-width: 960px;
-}
-
-.batchCard {
-  background-color: #1f1f1f;
-  padding: 1rem;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-}
-
-.batchLabel {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  color: #fff;
-}
-
+/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .main {
     padding: 1rem;
-    align-items: center;
-    justify-content: flex-start; /* Yukarıdan başlasın ama yatayda ortalansın */
+    padding-top: 3.5rem; /* Space for fixed ThemeToggle */
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .trayCard {
+    min-height: 100px;
+    padding: 1rem;
+  }
+
+  .moveSection {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0.5rem 1rem;
+  }
+
+  .moveSelect,
+  .moveInput {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .moveButtonMain {
+    min-height: 44px;
+  }
+
+  .modalContent {
+    padding: 1.5rem;
+    margin: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modalTitle {
+    font-size: 1.1rem;
+  }
+
+  .dateTimeRow {
+    flex-direction: column;
+  }
+
+  .dateTimeRow label {
+    min-width: 100%;
+  }
+
+  .wateringSchedule label {
+    flex: 1;
+    min-width: 0;
   }
 }
 
 @media (max-width: 600px) {
-  .trayCard {
+  .main {
+    padding: 0.75rem;
+    padding-top: 3.5rem;
+  }
+
+  .title {
+    font-size: 1.35rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
     max-width: 320px;
     margin: 0 auto;
   }
+
+  .trayCard {
+    max-width: 100%;
+  }
+
+  .moveSection {
+    margin: 1rem 0.5rem;
+  }
+
+  .modalContent {
+    padding: 1.25rem;
+    margin: 0.75rem;
+    width: 100%;
+  }
+
+  .wateringSchedule {
+    gap: 0.4rem;
+  }
+
+  .wateringSchedule label {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.9rem;
+  }
 }
 
-.title {
-  text-align: center;
-  width: 100%;
+/* Safe area for notched devices */
+@supports (padding: max(0px)) {
+  .main {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Touch-friendly */
+@media (hover: none) {
+  .trayCard .detailButton:hover {
+    background: var(--color-core);
+  }
 }

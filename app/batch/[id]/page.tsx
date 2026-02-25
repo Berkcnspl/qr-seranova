@@ -158,7 +158,7 @@ export default function BatchPage() {
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Batch {batchId?.toString().padStart(3, "0")}</h1>
-      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+      <div className={styles.backButtonWrapper}>
         <button className={styles.backButton} onClick={() => router.push("/")}>Ana Sayfa</button>
       </div>
 
@@ -235,8 +235,7 @@ export default function BatchPage() {
         <button
           disabled={!clearIndex}
           onClick={handleClearTray}
-          className={styles.moveButtonMain}
-          style={{ backgroundColor: "#c0392b" }}
+          className={`${styles.moveButtonMain} ${styles.moveButtonDanger}`}
         >
           Seçilen Tepsiyi Temizle
         </button>
