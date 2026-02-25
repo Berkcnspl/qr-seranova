@@ -298,7 +298,7 @@ export default function BatchPage() {
       </div>
 
       <div className={styles.wateringSchedule}>
-        <strong style={{ marginBottom: "0.5rem" }}>Sulama Takvimi:</strong>
+        <strong>Sulama Takvimi:</strong>
         {trays[modalIndex].wateringSchedule.map((checked, i) => (
           <label key={i}>
             <input

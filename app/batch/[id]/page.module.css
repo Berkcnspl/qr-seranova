@@ -245,34 +245,39 @@
 }
 
 .wateringSchedule {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
   margin-top: 1rem;
 }
 
 .wateringSchedule strong {
-  width: 100%;
+  grid-column: 1 / -1;
   font-size: 0.9rem;
   color: var(--color-text-muted);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .wateringSchedule label {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  padding: 0.4rem 0.75rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
+  min-height: 40px;
 }
 
 .wateringSchedule input[type="checkbox"] {
   accent-color: var(--color-core);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 /* ========== RESPONSIVE ========== */
@@ -335,9 +340,20 @@
     min-width: 100%;
   }
 
+  .wateringSchedule {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
   .wateringSchedule label {
-    flex: 1;
-    min-width: 0;
+    min-height: 44px;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .wateringSchedule input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -373,12 +389,19 @@
   }
 
   .wateringSchedule {
-    gap: 0.4rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
   }
 
   .wateringSchedule label {
-    padding: 0.35rem 0.6rem;
+    min-height: 48px;
+    padding: 0.6rem 0.5rem;
     font-size: 0.9rem;
+  }
+
+  .wateringSchedule input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
   }
 }
 
