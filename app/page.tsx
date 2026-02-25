@@ -14,6 +14,7 @@ import {
 import QRCode from "react-qr-code";
 import QRCodeLib from "qrcode";
 import { jsPDF } from "jspdf";
+import ThemeToggle from "@/components/ThemeToggle";
 import styles from "./page.module.css";
 
 type Batch = {
@@ -190,6 +191,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
+      <ThemeToggle />
       <div className={styles.header}>
         <h1 className={styles.title}>Batch Envanteri</h1>
         <div className={styles.actions}>

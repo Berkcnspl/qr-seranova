@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 import { Inter, Montserrat } from "next/font/google";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import ThemeToggle from "@/components/ThemeToggle";
 import ThemeInitScript from "@/components/ThemeInitScript";
 
 const inter = Inter({
@@ -41,10 +40,7 @@ export default function RootLayout({
     <html lang="tr" className={`${inter.variable} ${montserrat.variable}`}>
       <body>
         <ThemeInitScript />
-        <ThemeProvider>
-          <ThemeToggle />
-          {children}
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
